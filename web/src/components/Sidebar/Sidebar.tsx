@@ -4,7 +4,7 @@ import { SidebarMenu } from "./SidebarMenu";
 
 export function Sidebar() {
   return (
-    <aside className="relative w-72 h-screen bg-base-200 px-3 py-5 border-r border-white/10 shadow">
+    <aside className="relative w-80 h-screen bg-base-200 px-3 py-5 border-r border-white/10 shadow">
       <div className="flex flex-col gap-5">
         {/* Header */}
         <SidebarHeader />

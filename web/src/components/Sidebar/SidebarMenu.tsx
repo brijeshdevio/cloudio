@@ -18,7 +18,7 @@ function MenuItem({ Icon, to = "", label = "" }: MenuItemProps) {
 
 export function SidebarMenu() {
   return (
-    <ul className="menu w-full gap-2">
+    <ul className="menu w-full gap-2 p-0">
       {menuItems.map((item) => (
         <MenuItem key={item.label} {...item} />
       ))}

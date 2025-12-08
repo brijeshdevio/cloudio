@@ -1,7 +1,7 @@
 export function Recent() {
   return (
     <div>
-      <h1>Recent Page</h1>
+      <h1>Recent</h1>
     </div>
   );
 }

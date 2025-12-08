@@ -1,24 +1,27 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ProtectLayout } from "@/layouts";
+import { AuthRoute } from "./AuthRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 import {
   Home,
   Login,
   MyDrive,
   Profile,
   Recent,
-  Register,
+  Signup,
   Starred,
   Trash,
 } from "@/pages";
 
-export function Router() {
+export function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route element={<ProtectLayout />}>
+        <Route element={<AuthRoute />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+        <Route element={<ProtectedRoute />}>
           <Route path="/my-drive" element={<MyDrive />} />
           <Route path="/recent" element={<Recent />} />
           <Route path="/starred" element={<Starred />} />

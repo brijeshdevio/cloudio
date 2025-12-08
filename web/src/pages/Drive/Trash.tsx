@@ -1,7 +1,7 @@
 export function Trash() {
   return (
     <div>
-      <h1>Trash Page</h1>
+      <h1>Trash</h1>
     </div>
   );
 }

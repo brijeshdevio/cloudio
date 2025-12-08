@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ProtectLayout } from "@/layouts";
 import {
   Home,
   Login,
@@ -17,11 +18,13 @@ export function Router() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/my-drive" element={<MyDrive />} />
-        <Route path="/recent" element={<Recent />} />
-        <Route path="/starred" element={<Starred />} />
-        <Route path="/trash" element={<Trash />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route element={<ProtectLayout />}>
+          <Route path="/my-drive" element={<MyDrive />} />
+          <Route path="/recent" element={<Recent />} />
+          <Route path="/starred" element={<Starred />} />
+          <Route path="/trash" element={<Trash />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,9 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Sidebar } from "@/components";
 
-export function MainLayout() {
+export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main>
-      <Outlet />
-    </main>
+    <div className="flex">
+      <Sidebar />
+      <main>{children}</main>
+    </div>
   );
 }

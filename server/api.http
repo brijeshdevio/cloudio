@@ -25,28 +25,28 @@ Content-Type: application/json
 
 ### GET - /users/profile
 GET http://localhost:3000/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTM3ZDA1NWVhNjhjYzIwYjU2YzRjM2UiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1MjY1NDk2LCJleHAiOjE3NjUzNTE4OTZ9.tF1bCtDisUKjqQ98e4rnLsHzvkJ1NSAKuUjbSH0exLs
 
 
 ### POST - /folders
 POST http://localhost:3000/folders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTM3ZDA1NWVhNjhjYzIwYjU2YzRjM2UiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1MjY1NDk2LCJleHAiOjE3NjUzNTE4OTZ9.tF1bCtDisUKjqQ98e4rnLsHzvkJ1NSAKuUjbSH0exLs
 
 {
-  "name": "JS"
+  "name": "Function",
+  "parent": "6937d097ea68cc20b56c4c46"
 }
 
 
 ### GET - /folders
 GET http://localhost:3000/folders
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTM3ZDA1NWVhNjhjYzIwYjU2YzRjM2UiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1MjY1NDk2LCJleHAiOjE3NjUzNTE4OTZ9.tF1bCtDisUKjqQ98e4rnLsHzvkJ1NSAKuUjbSH0exLs
 
 
 ### GET - /folders/:ID
-GET http://localhost:3000/folders/9399dbaf-22b6-4238-800d-35c7b92435d9
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
-
+GET http://localhost:3000/folders/6937d097ea68cc20b56c4c46
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTM3ZDA1NWVhNjhjYzIwYjU2YzRjM2UiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1MjY1NDk2LCJleHAiOjE3NjUzNTE4OTZ9.tF1bCtDisUKjqQ98e4rnLsHzvkJ1NSAKuUjbSH0exLs
 
 ### PUT - /folders/:ID
 PUT http://localhost:3000/folders/6767a47f-acc5-458d-a93e-090caf514ebd

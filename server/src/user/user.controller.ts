@@ -10,11 +10,11 @@ export class UserController {
 
   @Get('profile')
   async handleGetProfile(
-    @Req() req: { user: { sub: string; email: string } },
+    @Req() req: { user: { sub: string } },
     @Res() res: Response,
   ): Promise<Response> {
-    const { sub, email } = req.user;
-    const user = await this.userService.getProfile(sub, email);
+    const { sub } = req.user;
+    const user = await this.userService.getProfile(sub);
     return res.json({ user });
   }
 }

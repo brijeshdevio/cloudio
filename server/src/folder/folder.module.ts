@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Folder } from '@/entities/folder.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Folder, FolderSchema } from '@/entities/folder.entity';
 import { FolderService } from './folder.service';
 import { FolderController } from './folder.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Folder])],
+  imports: [
+    MongooseModule.forFeature([{ name: Folder.name, schema: FolderSchema }]),
+  ],
   controllers: [FolderController],
   providers: [FolderService],
 })

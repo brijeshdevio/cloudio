@@ -1,7 +1,7 @@
 import {
   Body,
   Controller,
-  Delete,
+  // Delete,
   Get,
   Param,
   Post,
@@ -37,19 +37,19 @@ export class FolderController {
     @Res() res: Response,
   ): Promise<Response> {
     const { sub } = req.user;
-    const folders = await this.folderService.getFolders(sub);
-    return res.json({ folders });
+    const result = await this.folderService.getRootFolders(sub);
+    return res.json(result);
   }
 
-  @Get('trashed')
-  async handleGetTrashedFolders(
-    @Req() req: { user: { sub: string } },
-    @Res() res: Response,
-  ): Promise<Response> {
-    const { sub } = req.user;
-    const folders = await this.folderService.getTrashedFolders(sub);
-    return res.json({ folders });
-  }
+  // @Get('trashed')
+  // async handleGetTrashedFolders(
+  //   @Req() req: { user: { sub: string } },
+  //   @Res() res: Response,
+  // ): Promise<Response> {
+  //   const { sub } = req.user;
+  //   const folders = await this.folderService.getTrashedFolders(sub);
+  //   return res.json({ folders });
+  // }
 
   @Get(':id')
   async handleGetFolderById(
@@ -74,25 +74,25 @@ export class FolderController {
     return res.json({ folder, message: 'Folder renamed successfully.' });
   }
 
-  @Post(':id')
-  async handleTrashFolder(
-    @Req() req: { user: { sub: string } },
-    @Param('id') id: string,
-    @Res() res: Response,
-  ): Promise<Response> {
-    const { sub } = req.user;
-    const folder = await this.folderService.markTrashFolder(sub, id);
-    return res.json({ folder, message: 'Folder trashed successfully.' });
-  }
+  // @Post(':id')
+  // async handleTrashFolder(
+  //   @Req() req: { user: { sub: string } },
+  //   @Param('id') id: string,
+  //   @Res() res: Response,
+  // ): Promise<Response> {
+  //   const { sub } = req.user;
+  //   const folder = await this.folderService.markTrashFolder(sub, id);
+  //   return res.json({ folder, message: 'Folder trashed successfully.' });
+  // }
 
-  @Delete(':id')
-  async handleDeleteFolder(
-    @Req() req: { user: { sub: string } },
-    @Param('id') id: string,
-    @Res() res: Response,
-  ): Promise<Response> {
-    const { sub } = req.user;
-    const folder = await this.folderService.deleteFolder(sub, id);
-    return res.json({ folder, message: 'Folder deleted successfully.' });
-  }
+  // @Delete(':id')
+  // async handleDeleteFolder(
+  //   @Req() req: { user: { sub: string } },
+  //   @Param('id') id: string,
+  //   @Res() res: Response,
+  // ): Promise<Response> {
+  //   const { sub } = req.user;
+  //   const folder = []
+  //   return res.json({ folder, message: 'Folder deleted successfully.' });
+  // }
 }

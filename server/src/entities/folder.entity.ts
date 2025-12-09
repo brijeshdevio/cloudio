@@ -1,43 +1,21 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { User } from './user.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
-@Entity('folders')
+export type FolderDocument = HydratedDocument<Folder>;
+
+@Schema({ timestamps: true })
 export class Folder {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @ManyToOne(() => User, (user) => user.folders, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
-
-  @Column({ name: 'name', type: 'varchar', length: 255 })
+  @Prop({ type: String, required: true })
   name: string;
 
-  @ManyToOne(() => Folder, (folder) => folder.children, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'parent_id' })
-  parent?: Folder;
+  @Prop({ type: Types.ObjectId, required: true, ref: 'User' })
+  owner: Types.ObjectId;
 
-  @OneToMany(() => Folder, (folder) => folder.parent)
-  children: Folder[];
+  @Prop({ type: Types.ObjectId, ref: 'Folder' })
+  parent: Types.ObjectId;
 
-  @Column({ name: 'is_trashed', type: 'boolean', default: false })
-  isTrashed: boolean;
-
-  @Column({ name: 'trashed_at', type: 'timestamp', nullable: true })
-  trashed_at: Date;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  updatedAt: Date;
+  @Prop({ type: [Types.ObjectId], ref: 'Folder' })
+  path: Types.ObjectId[];
 }
+
+export const FolderSchema = SchemaFactory.createForClass(Folder);

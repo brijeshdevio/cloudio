@@ -1,33 +1,18 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Folder } from './folder.entity';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
 
-@Entity('users')
+export type UserDocument = HydratedDocument<User>;
+
+@Schema({ timestamps: true })
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'varchar', nullable: false })
+  @Prop({ type: String, required: true })
   name: string;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
+  @Prop({ type: String, required: true, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Prop({ type: String, required: true })
   password: string;
-
-  @OneToMany(() => Folder, (folder) => folder.user)
-  folders: Folder[];
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  updatedAt: Date;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,25 +1,22 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from '@/entities/user.entity';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  async getProfile(id: string, email: string) {
-    const user = await this.userRepository.findOne({
-      where: { id, email },
-      select: { id: true, email: true, name: true },
-    });
-
+  async getProfile(id: string) {
+    const user = await this.userModel
+      .findById(id)
+      .lean()
+      .select('-__v -password');
     if (user) {
       return user;
     }
-
-    throw new UnauthorizedException('You are not logged in.');
+    throw new UnauthorizedException('You are not authorized');
   }
 }

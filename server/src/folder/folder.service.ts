@@ -1,132 +1,99 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { Folder } from '@/entities/folder.entity';
 import { CreateFolderDto, RenameFolderDto } from './dto';
 
 @Injectable()
 export class FolderService {
   constructor(
-    @InjectRepository(Folder)
-    private folderRepository: Repository<Folder>,
+    @InjectModel(Folder.name)
+    private folderModel: Model<Folder>,
   ) {}
 
   private async isUniqueFolder(
-    userId: string,
+    owner: string,
+    parent: string | undefined,
     name: string,
-    parentId?: string,
-  ): Promise<void> {
-    const isFolder = await this.folderRepository.findOne({
-      where: {
-        user: { id: userId },
-        parent: parentId ? { id: parentId } : undefined,
-        name,
-      },
-    });
-
+  ): Promise<boolean> {
+    if (parent) this.isValidId(parent);
+    const isFolder = await this.folderModel.findOne({ owner, name, parent });
     if (isFolder) {
-      throw new ConflictException(`Folder '${name}' already exists`);
+      throw new ConflictException(`Folder ${name} already exists`);
     }
+    return true;
   }
 
-  async createFolder(userId: string, data: CreateFolderDto) {
-    await this.isUniqueFolder(userId, data.name, data.parent as string);
+  private isValidId(_id: string) {
+    if (isValidObjectId(_id)) {
+      return true;
+    }
+    throw new BadRequestException('Invalid Folder ID: ' + _id);
+  }
 
-    const folder = this.folderRepository.create({
-      user: { id: userId },
-      parent: data.parent ? { id: data.parent } : undefined,
-      name: data.name,
-    });
+  async createFolder(owner: string, data: CreateFolderDto) {
+    await this.isUniqueFolder(owner, data.parent, data.name);
 
-    await this.folderRepository.save(folder);
+    const folder = await this.folderModel.create({ ...data, owner });
     return folder;
   }
 
-  async getFolder(userId: string, folderId: string) {
-    const folder = await this.folderRepository.findOne({
-      where: { user: { id: userId }, id: folderId },
-    });
+  async getFolder(owner: string, _id: string): Promise<unknown> {
+    this.isValidId(_id);
+    const folder = await this.folderModel
+      .findOne({ owner, _id })
+      .lean()
+      .select('-owner -__v')
+      .populate('parent', 'name')
+      .populate('path', 'name');
 
     if (!folder) {
       throw new ForbiddenException('You do not have access to this folder.');
     }
 
-    const subFolders = await this.folderRepository.find({
-      where: { user: { id: userId }, parent: { id: folder.id } },
-    });
+    const subFolders = await this.folderModel
+      .find({
+        owner,
+        parent: String(folder._id),
+      })
+      .lean()
+      .select('-owner -parent -__v -path');
 
     return { folder, subFolders };
   }
 
-  async getFolders(userId: string) {
-    const folders = await this.folderRepository.find({
-      where: { user: { id: userId }, parent: IsNull(), isTrashed: false },
-    });
-    return folders;
+  async getRootFolders(owner: string) {
+    const subFolders = await this.folderModel
+      .find({ owner, parent: null })
+      .lean()
+      .select('-owner -parent -path -__v')
+      .sort({ updatedAt: -1 });
+    const files = [];
+    return { subFolders, files };
   }
 
-  async renameFolder(userId: string, folderId: string, data: RenameFolderDto) {
-    const folder = await this.folderRepository.findOne({
-      where: { user: { id: userId }, id: folderId },
-    });
+  public async renameFolder(owner: string, _id: string, data: RenameFolderDto) {
+    this.isValidId(_id);
+    const folder = await this.folderModel.findById(_id);
 
-    if (!folder) {
-      throw new ForbiddenException('You do not have access to this folder.');
-    }
-
-    await this.isUniqueFolder(
-      userId,
-      data.name,
-      folder.parent as unknown as string,
+    const renamedFolder = await this.folderModel.findByIdAndUpdate(
+      _id,
+      { ...data },
+      { new: true },
     );
 
-    const renameFolder = await this.folderRepository.findOneBy({
-      id: folderId,
-    });
-
-    if (!renameFolder) {
+    if (!renamedFolder) {
       throw new ForbiddenException('You do not have access to this folder.');
     }
 
-    renameFolder.name = data.name;
-    return this.folderRepository.save(renameFolder);
-  }
+    const parent = folder?.parent ? String(folder?.parent) : undefined;
+    await this.isUniqueFolder(owner, parent, data.name);
 
-  async markTrashFolder(userId: string, folderId: string) {
-    const folder = await this.folderRepository.findOne({
-      where: { user: { id: userId }, id: folderId },
-    });
-
-    if (!folder) {
-      throw new ForbiddenException('You do not have access to this folder.');
-    }
-
-    folder.isTrashed = true;
-    folder.trashed_at = new Date();
-
-    return this.folderRepository.save(folder);
-  }
-
-  async getTrashedFolders(userId: string) {
-    const folders = await this.folderRepository.find({
-      where: { user: { id: userId }, parent: IsNull(), isTrashed: true },
-    });
-    return folders;
-  }
-
-  async deleteFolder(userId: string, folderId: string) {
-    const folder = await this.folderRepository.findOne({
-      where: { user: { id: userId }, id: folderId },
-    });
-
-    if (!folder) {
-      throw new ForbiddenException('You do not have access to this folder.');
-    }
-
-    return this.folderRepository.remove(folder);
+    return renamedFolder;
   }
 }

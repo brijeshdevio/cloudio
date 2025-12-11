@@ -5,6 +5,7 @@ export function DriveHeader() {
   const { modal } = useModal();
 
   const handleOpenNewFolder = () => modal("NewFolder", true);
+  const handleOpenFileUpload = () => modal("NewFile", true);
 
   return (
     <>
@@ -15,7 +16,10 @@ export function DriveHeader() {
             <Plus size={20} />
             <span>New Folder</span>
           </button>
-          <button className="btn btn-primary  rounded-2xl">
+          <button
+            className="btn btn-primary rounded-2xl"
+            onClick={handleOpenFileUpload}
+          >
             <File size={20} />
             <span>Upload</span>
           </button>

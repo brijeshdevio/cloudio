@@ -4,7 +4,7 @@ import type { ModalContextType, ModalsType } from "@/types";
 const initialState: ModalContextType = {
   modal: () => {},
   modals: {
-    NewFolder: true,
+    NewFolder: false,
     NewFile: false,
   },
 };

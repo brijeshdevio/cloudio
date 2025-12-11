@@ -1,0 +1,45 @@
+import { CloudUpload, X } from "lucide-react";
+import { useModal } from "@/app/providers";
+
+export function FileUpload() {
+  const { modal } = useModal();
+  const handleClose = () => modal("NewFile", false);
+
+  return (
+    <div className="card bg-base-100 w-full max-w-[450px] sm:w-[450px] shadow">
+      <div className="card-body">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg">Upload Files</h2>
+          <button
+            className="btn btn-circle btn-ghost text-error btn-sm"
+            onClick={handleClose}
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <form>
+          <div className="w-full flex flex-col gap-2 py-6 border border-dashed border-white/10 rounded-3xl text-center">
+            <div className="bg-primary w-fit mx-auto text-white p-2 rounded-2xl">
+              <CloudUpload />
+            </div>
+            <h3 className="text-md">Drag & Drop files here</h3>
+            <p className="badge mx-auto">Or</p>
+            <div>
+              <button className="btn rounded-2xl">Browse Files</button>
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-3 mt-5">
+            <button
+              className="btn btn-sm btn-error"
+              type="button"
+              onClick={handleClose}
+            >
+              Cancel
+            </button>
+            <button className="btn btn-sm btn-primary">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

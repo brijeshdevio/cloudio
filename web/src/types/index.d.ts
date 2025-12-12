@@ -11,7 +11,7 @@ export type ModalContextType = {
 
 // ======== Auth ============
 export type UserType = {
-  _id: string;
+  id: string;
   name: string;
   avatar?: string;
   email: string;
@@ -22,3 +22,12 @@ export type AuthContextType = {
   loading: boolean;
   isAuthenticated: boolean;
 };
+
+// ============= Auth FORM ============
+export interface SignupType {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export type LoginType = Omit<SignupType, "name">;

@@ -1,3 +1,6 @@
+import { useSignup } from "@/hooks/useAuth";
+import type { SignupType } from "@/types";
+import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 const formFields = [
@@ -19,6 +22,15 @@ const formFields = [
 ];
 
 export function Signup() {
+  const { mutate, isPending } = useSignup();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+    mutate(data as unknown as SignupType);
+  };
+
   return (
     <>
       <div className="text-center">
@@ -27,7 +39,7 @@ export function Signup() {
       </div>
 
       <div className="card bg-base-200 shadow">
-        <form className="flex flex-col gap-2 card-body">
+        <form className="flex flex-col gap-2 card-body" onSubmit={handleSubmit}>
           {formFields.map((field) => (
             <div key={field.name} className="flex flex-col">
               <label htmlFor={field.name}>
@@ -37,12 +49,21 @@ export function Signup() {
                 type={field.type}
                 name={field.name}
                 placeholder={field.placeholder}
+                required
                 className="input w-full rounded-2xl"
               />
             </div>
           ))}
-          <button className="btn btn-primary mt-2 rounded-2xl">
-            Create Account
+          <button
+            className="btn btn-primary mt-2 rounded-2xl"
+            type="submit"
+            disabled={isPending}
+          >
+            {isPending ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
       </div>

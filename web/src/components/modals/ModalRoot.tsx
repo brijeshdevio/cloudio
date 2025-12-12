@@ -20,7 +20,7 @@ export function ModalRoot({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full flex items-center justify-center p-3"
+        className="w-fit flex items-center justify-center p-3"
       >
         {children}
       </div>

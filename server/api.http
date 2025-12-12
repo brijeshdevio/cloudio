@@ -1,0 +1,28 @@
+### GET - /
+GET http://localhost:3000/
+
+
+### POST - /auth/signup
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Saim",
+  "email": "saim@ex.com",
+  "password": "R18a1m13@"
+}
+
+
+### POST - /auth/login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "saim@ex.com",
+  "password": "R18a1m13@"
+}
+
+
+### GET - /users/profile
+GET http://localhost:3000/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoic2FpbUBleC5jb20iLCJpYXQiOjE3NjU1MDE5NjcsImV4cCI6MTc2NTU4ODM2N30.4XGK2hALZXbPuQSieNXanqluhTrS3yq6SlMQPavPETM

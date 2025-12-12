@@ -1,15 +1,22 @@
 import { AppRoutes } from "./routes/AppRoutes";
-import { ModalProvider } from "./providers";
+import { AuthProvider, ModalProvider } from "./providers";
 import { Modals } from "@/components";
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
 
 export function App() {
   return (
     <>
       <ModalProvider>
-        <AppRoutes />
+        <AuthProvider>
+          <QueryClientProvider client={new QueryClient()}>
+            <AppRoutes />
+          </QueryClientProvider>
+        </AuthProvider>
         <Modals />
       </ModalProvider>
+      <Toaster />
     </>
   );
 }

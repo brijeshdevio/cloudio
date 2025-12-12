@@ -12,9 +12,9 @@ export function App() {
         <AuthProvider>
           <QueryClientProvider client={new QueryClient()}>
             <AppRoutes />
+            <Modals />
           </QueryClientProvider>
         </AuthProvider>
-        <Modals />
       </ModalProvider>
       <Toaster />
     </>

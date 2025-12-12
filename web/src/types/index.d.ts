@@ -31,3 +31,9 @@ export interface SignupType {
 }
 
 export type LoginType = Omit<SignupType, "name">;
+
+// ============ Folder Types ===========
+export type CreateFolderType = {
+  name: string;
+  parent?: string;
+};

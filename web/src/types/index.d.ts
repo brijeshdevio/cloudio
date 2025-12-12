@@ -37,3 +37,10 @@ export type CreateFolderType = {
   name: string;
   parent?: string;
 };
+
+export type DriveTableProps = {
+  id: string;
+  name: string;
+  size?: string;
+  updatedAt: string;
+};

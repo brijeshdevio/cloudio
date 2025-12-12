@@ -10,7 +10,7 @@ export class UserController {
 
   @Get('profile')
   async handleGetProfile(
-    @Req() req: { user: { sub: number; email: string } },
+    @Req() req: { user: { sub: string; email: string } },
     @Res() res: Response,
   ): Promise<Response> {
     const { sub, email } = req.user;

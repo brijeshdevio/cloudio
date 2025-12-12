@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 const hosts = process.env.HOSTS_URI as string;
 const allowHosts = hosts?.split(' ');
-console.log(allowHosts);
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());

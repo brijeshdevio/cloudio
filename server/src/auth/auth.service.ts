@@ -18,7 +18,7 @@ export class AuthService {
   ) {}
 
   private async generateJwtToken(
-    userId: number,
+    userId: string,
     email: string,
   ): Promise<string> {
     const payload = { sub: userId, email };

@@ -10,7 +10,7 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async getProfile(id: number, email: string) {
+  async getProfile(id: string, email: string) {
     const user = await this.userRepository.findOne({
       where: { id, email },
       select: { id: true, email: true, name: true },

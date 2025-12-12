@@ -25,4 +25,48 @@ Content-Type: application/json
 
 ### GET - /users/profile
 GET http://localhost:3000/users/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoic2FpbUBleC5jb20iLCJpYXQiOjE3NjU1MDE5NjcsImV4cCI6MTc2NTU4ODM2N30.4XGK2hALZXbPuQSieNXanqluhTrS3yq6SlMQPavPETM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+
+### POST - /folders
+POST http://localhost:3000/folders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+{
+  "name": "JS"
+}
+
+
+### GET - /folders
+GET http://localhost:3000/folders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+
+### GET - /folders/:ID
+GET http://localhost:3000/folders/9399dbaf-22b6-4238-800d-35c7b92435d9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+
+### PUT - /folders/:ID
+PUT http://localhost:3000/folders/6767a47f-acc5-458d-a93e-090caf514ebd
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+{
+  "name": "ReactJS"
+}
+
+
+### DELETE - /folders/:ID
+DELETE http://localhost:3000/folders/9399dbaf-22b6-4238-800d-35c7b92435d9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+
+### POST - /folders/:ID
+POST http://localhost:3000/folders/bc05a314-2356-4f80-b003-0beef6e5ea4e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ
+
+### GET - /folders/trashed
+GET http://localhost:3000/folders/trashed
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNzRkZTZmNS0yYTIyLTRlM2YtODFiYi02NGViMWZmNmJiYmEiLCJlbWFpbCI6InNhaW1AZXguY29tIiwiaWF0IjoxNzY1NTA4OTQ5LCJleHAiOjE3NjU1OTUzNDl9.Xe9rpuC9XlFlghtTxElclNy008Y7TguaEOT1c8g8PlQ

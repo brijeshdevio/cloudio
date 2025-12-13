@@ -55,3 +55,8 @@ export type DriveTableProps = {
   size?: string;
   updatedAt: string;
 };
+
+export type UploadFileType = {
+  file: File;
+  folder?: string;
+};

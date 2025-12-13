@@ -13,7 +13,7 @@ export function MyDrive() {
     } else {
       getFoldersQuery.refetch();
     }
-  }, [getFoldersQuery, getFolderQuery, FOLDER_ID]);
+  }, [FOLDER_ID]);
 
   const folders =
     getFolderQuery.data?.subFolders || getFoldersQuery.data?.subFolders;

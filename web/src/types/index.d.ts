@@ -11,7 +11,7 @@ export type ModalContextType = {
 
 // ======== Auth ============
 export type UserType = {
-  id: string;
+  _id: string;
   name: string;
   avatar?: string;
   email: string;
@@ -39,7 +39,7 @@ export type CreateFolderType = {
 };
 
 export type DriveTableProps = {
-  id: string;
+  _id: string;
   name: string;
   size?: string;
   updatedAt: string;

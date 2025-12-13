@@ -1,13 +1,22 @@
 import { useEffect } from "react";
 import { DriveHeader, DriveTable, Pagination } from "@/components";
 import { useFolder } from "@/hooks/useFolder";
+import { useParams } from "react-router-dom";
 
 export function MyDrive() {
-  const { data, refetch } = useFolder().getFoldersQuery;
+  const { FOLDER_ID } = useParams();
+  const { getFoldersQuery, getFolderQuery } = useFolder();
 
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    if (FOLDER_ID) {
+      getFolderQuery.refetch();
+    } else {
+      getFoldersQuery.refetch();
+    }
+  }, [getFoldersQuery, getFolderQuery, FOLDER_ID]);
+
+  const folders =
+    getFolderQuery.data?.subFolders || getFoldersQuery.data?.subFolders;
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">
@@ -18,7 +27,7 @@ export function MyDrive() {
 
       {/* Items */}
       <section className="h-[60vh] overflow-y-scroll rounded-2xl">
-        <DriveTable items={data?.folders} />
+        <DriveTable items={folders} />
       </section>
 
       <section>

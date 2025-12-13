@@ -17,13 +17,13 @@ export function DriveTable({ items = [] }: { items: DriveTableProps[] }) {
       </thead>
       <tbody>
         {items?.map((item) => (
-          <tr key={item.id} className="group">
+          <tr key={item._id} className="group">
             <td>
               {item.size ? (
                 <>{item.name}</>
               ) : (
                 <>
-                  <Link to={`/my-drive/${item.id}`}>{item.name}</Link>
+                  <Link to={`/my-drive/${item._id}`}>{item.name}</Link>
                 </>
               )}
             </td>

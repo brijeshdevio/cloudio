@@ -3,15 +3,20 @@ import { X } from "lucide-react";
 import { useModal } from "@/app/providers";
 import { useFolder } from "@/hooks/useFolder";
 import type { CreateFolderType } from "@/types";
+import { useParams } from "react-router-dom";
 
 export function NewFolder() {
   const { modal } = useModal();
+  const { FOLDER_ID } = useParams();
   const { createFolderMutation } = useFolder();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+    if (FOLDER_ID) {
+      data.parent = FOLDER_ID;
+    }
     await createFolderMutation
       .mutateAsync(data as unknown as CreateFolderType)
       .finally(handleClose);

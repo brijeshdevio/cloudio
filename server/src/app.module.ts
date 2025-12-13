@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { FolderModule } from './folder/folder.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FolderModule } from './folder/folder.module';
     AuthModule,
     UserModule,
     FolderModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

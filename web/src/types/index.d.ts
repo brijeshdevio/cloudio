@@ -38,6 +38,17 @@ export type CreateFolderType = {
   parent?: string;
 };
 
+export type BreadcrumbType = {
+  _id: string;
+  name: string;
+  path: [
+    {
+      _id: string;
+      name: string;
+    }
+  ];
+};
+
 export type DriveTableProps = {
   _id: string;
   name: string;

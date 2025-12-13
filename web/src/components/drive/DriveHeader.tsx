@@ -1,7 +1,13 @@
 import { useModal } from "@/app/providers";
+import type { BreadcrumbType } from "@/types";
 import { File, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export function DriveHeader() {
+export function DriveHeader({
+  currentFolder,
+}: {
+  currentFolder: BreadcrumbType;
+}) {
   const { modal } = useModal();
 
   const handleOpenNewFolder = () => modal("NewFolder", true);
@@ -25,15 +31,22 @@ export function DriveHeader() {
           </button>
         </div>
       </div>
+
       <div className="breadcrumbs text-sm">
         <ul>
           <li>
-            <a>MyDrive</a>
+            <Link to={"/my-drive"}>My Drive</Link>
           </li>
-          <li>
-            <a>Documents</a>
-          </li>
-          <li>Add Document</li>
+          {currentFolder?.path?.map((path: { _id: string; name: string }) => (
+            <li key={path?._id}>
+              <Link to={`/my-drive/${path._id}`}>{path?.name}</Link>
+            </li>
+          ))}
+          {currentFolder && (
+            <li key={currentFolder?._id}>
+              <span>{currentFolder?.name}</span>
+            </li>
+          )}
         </ul>
       </div>
     </>

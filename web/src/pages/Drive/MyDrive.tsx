@@ -22,7 +22,7 @@ export function MyDrive() {
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">
       {/* Header */}
       <section>
-        <DriveHeader />
+        <DriveHeader currentFolder={getFolderQuery.data?.folder} />
       </section>
 
       {/* Items */}

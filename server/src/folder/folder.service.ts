@@ -87,7 +87,8 @@ export class FolderService {
     const folder = await this.folderModel
       .findOne({ _id: folderId, owner })
       .lean()
-      .select('-__v -parent -owner');
+      .select('-__v -parent -owner')
+      .populate('path', 'name');
 
     if (!folder) {
       throw new ForbiddenException('Access to folder denied');

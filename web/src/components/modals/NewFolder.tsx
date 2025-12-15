@@ -40,7 +40,7 @@ export function NewFolder() {
           <input
             type="text"
             className="input w-full rounded-2xl"
-            placeholder="Folder Name"
+            placeholder="e.g. Documents"
             name="name"
             required
           />

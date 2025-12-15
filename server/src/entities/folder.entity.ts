@@ -16,6 +16,12 @@ export class Folder {
 
   @Prop({ type: [Types.ObjectId], ref: 'Folder', default: [] })
   path: Types.ObjectId[];
+
+  @Prop({ type: Boolean, default: false })
+  starred: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  trashed: boolean;
 }
 
 export const FolderSchema = SchemaFactory.createForClass(Folder);

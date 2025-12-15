@@ -8,12 +8,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Folder } from '@/entities/folder.entity';
 import { CreateFolderDto, RenameFolderDto } from './dto';
+import { File } from '@/entities/file.entity';
 
 @Injectable()
 export class FolderService {
   constructor(
     @InjectModel(Folder.name)
     private folderModel: Model<Folder>,
+    @InjectModel(File.name)
+    private fileModel: Model<File>,
   ) {}
 
   private async isUniqueFolder(
@@ -36,64 +39,212 @@ export class FolderService {
     throw new BadRequestException('Invalid Folder ID: ' + _id);
   }
 
-  async createFolder(owner: string, data: CreateFolderDto) {
+  async createFolder(owner: string, data: CreateFolderDto): Promise<Folder> {
     await this.isUniqueFolder(owner, data.parent, data.name);
 
     const folder = await this.folderModel.create({ ...data, owner });
     return folder;
   }
 
-  async getFolder(owner: string, _id: string): Promise<unknown> {
-    this.isValidId(_id);
-    const folder = await this.folderModel
-      .findOne({ owner, _id })
-      .lean()
-      .select('-owner -__v')
-      .populate('parent', 'name')
-      .populate('path', 'name');
-
-    if (!folder) {
-      throw new ForbiddenException('You do not have access to this folder.');
-    }
-
-    const subFolders = await this.folderModel
+  async getFolders(owner: string): Promise<{
+    folders: Folder[];
+    files: File[];
+  }> {
+    const folders = await this.folderModel
       .find({
         owner,
-        parent: String(folder._id),
+        parent: null,
+        trashed: false,
       })
       .lean()
-      .select('-owner -parent -__v -path');
+      .select('_id name createdAt starred updatedAt')
+      .sort({ createdAt: -1 })
+      .limit(20);
 
-    return { folder, subFolders };
-  }
-
-  async getRootFolders(owner: string) {
-    const subFolders = await this.folderModel
-      .find({ owner, parent: null })
+    const files = await this.fileModel
+      .find({
+        owner,
+        folder: null,
+        trashed: false,
+      })
       .lean()
-      .select('-owner -parent -path -__v')
-      .sort({ updatedAt: -1 });
-    const files = [];
-    return { subFolders, files };
+      .select('_id name createdAt starred updatedAt size mimeType')
+      .sort({ createdAt: -1 })
+      .limit(20);
+    return { folders, files };
   }
 
-  public async renameFolder(owner: string, _id: string, data: RenameFolderDto) {
-    this.isValidId(_id);
-    const folder = await this.folderModel.findById(_id);
+  async getFolder(
+    owner: string,
+    folderId: string,
+  ): Promise<{
+    folder: Folder;
+    folders: Folder[];
+    files: File[];
+  }> {
+    this.isValidId(folderId);
 
-    const renamedFolder = await this.folderModel.findByIdAndUpdate(
-      _id,
-      { ...data },
-      { new: true },
-    );
+    const folder = await this.folderModel
+      .findOne({ _id: folderId, owner })
+      .lean()
+      .select('-__v -parent -owner');
 
-    if (!renamedFolder) {
-      throw new ForbiddenException('You do not have access to this folder.');
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
     }
 
-    const parent = folder?.parent ? String(folder?.parent) : undefined;
-    await this.isUniqueFolder(owner, parent, data.name);
+    const folders = await this.folderModel
+      .find({ owner, parent: folderId })
+      .lean()
+      .select('_id name createdAt starred updatedAt')
+      .sort({ createdAt: -1 })
+      .limit(20);
+    const files = await this.fileModel
+      .find({ owner, folder: folderId })
+      .lean()
+      .select('_id name createdAt starred updatedAt size mimeType')
+      .sort({ createdAt: -1 })
+      .limit(20);
+    return { folder, folders, files };
+  }
 
-    return renamedFolder;
+  async renameFolder(
+    owner: string,
+    folderId: string,
+    data: RenameFolderDto,
+  ): Promise<Folder> {
+    this.isValidId(folderId);
+    // await this.isUniqueFolder(owner, data.parent, data.name);
+
+    const folder = await this.folderModel
+      .findOneAndUpdate(
+        { _id: folderId, owner },
+        { name: data.name },
+        { new: true },
+      )
+      .lean()
+      .select('_id name updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
+  }
+
+  async starFolder(owner: string, folderId: string): Promise<Folder> {
+    this.isValidId(folderId);
+
+    const folder = await this.folderModel
+      .findOneAndUpdate(
+        { _id: folderId, owner },
+        { starred: true },
+        { new: true },
+      )
+      .lean()
+      .select('_id name starred updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
+  }
+
+  async unstarFolder(owner: string, folderId: string): Promise<Folder> {
+    this.isValidId(folderId);
+
+    const folder = await this.folderModel
+      .findOneAndUpdate(
+        { _id: folderId, owner },
+        { starred: false },
+        { new: true },
+      )
+      .lean()
+      .select('_id name starred updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
+  }
+
+  async getStarredFolders(owner: string): Promise<Folder[]> {
+    const folders = await this.folderModel
+      .find({ owner, starred: true, trashed: false })
+      .lean()
+      .select('_id name starred updatedAt')
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    return folders;
+  }
+
+  async trashFolder(owner: string, folderId: string): Promise<Folder> {
+    this.isValidId(folderId);
+
+    const folder = await this.folderModel
+      .findOneAndUpdate(
+        { _id: folderId, owner },
+        { trashed: true },
+        { new: true },
+      )
+      .lean()
+      .select('_id name trashed updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
+  }
+
+  async restoreFolder(owner: string, folderId: string): Promise<Folder> {
+    this.isValidId(folderId);
+
+    const folder = await this.folderModel
+      .findOneAndUpdate(
+        { _id: folderId, owner },
+        { trashed: false },
+        { new: true },
+      )
+      .lean()
+      .select('_id name trashed updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
+  }
+
+  async getTrashedFolders(owner: string): Promise<Folder[]> {
+    const folders = await this.folderModel
+      .find({ owner, trashed: true })
+      .lean()
+      .select('_id name trashed updatedAt')
+      .sort({ updatedAt: -1 })
+      .limit(20);
+
+    return folders;
+  }
+
+  async deleteFolder(owner: string, folderId: string): Promise<Folder> {
+    this.isValidId(folderId);
+
+    const folder = await this.folderModel
+      .findOneAndDelete({
+        _id: folderId,
+        owner,
+      })
+      .lean()
+      .select('_id name trashed updatedAt');
+
+    if (!folder) {
+      throw new ForbiddenException('Access to folder denied');
+    }
+
+    return folder;
   }
 }

@@ -24,7 +24,10 @@ export class File {
   secureUrl: string;
 
   @Prop({ type: Boolean, default: false })
-  isDeleted: string;
+  starred: boolean;
+
+  @Prop({ type: Boolean, default: false })
+  trashed: boolean;
 }
 
 export const FileSchema = SchemaFactory.createForClass(File);

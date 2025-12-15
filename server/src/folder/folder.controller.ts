@@ -1,9 +1,10 @@
 import {
   Body,
   Controller,
-  // Delete,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Req,
@@ -37,22 +38,32 @@ export class FolderController {
     @Res() res: Response,
   ): Promise<Response> {
     const { sub } = req.user;
-    const result = await this.folderService.getRootFolders(sub);
+    const result = await this.folderService.getFolders(sub);
     return res.json(result);
   }
 
-  // @Get('trashed')
-  // async handleGetTrashedFolders(
-  //   @Req() req: { user: { sub: string } },
-  //   @Res() res: Response,
-  // ): Promise<Response> {
-  //   const { sub } = req.user;
-  //   const folders = await this.folderService.getTrashedFolders(sub);
-  //   return res.json({ folders });
-  // }
+  @Get('stars')
+  async handleGetStarredFolders(
+    @Req() req: { user: { sub: string } },
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folders = await this.folderService.getStarredFolders(sub);
+    return res.json({ folders });
+  }
+
+  @Get('trash')
+  async handleGetTrashFolders(
+    @Req() req: { user: { sub: string } },
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folders = await this.folderService.getTrashedFolders(sub);
+    return res.json({ folders });
+  }
 
   @Get(':id')
-  async handleGetFolderById(
+  async handleGetFolder(
     @Req() req: { user: { sub: string } },
     @Param('id') id: string,
     @Res() res: Response,
@@ -74,25 +85,58 @@ export class FolderController {
     return res.json({ folder, message: 'Folder renamed successfully.' });
   }
 
-  // @Post(':id')
-  // async handleTrashFolder(
-  //   @Req() req: { user: { sub: string } },
-  //   @Param('id') id: string,
-  //   @Res() res: Response,
-  // ): Promise<Response> {
-  //   const { sub } = req.user;
-  //   const folder = await this.folderService.markTrashFolder(sub, id);
-  //   return res.json({ folder, message: 'Folder trashed successfully.' });
-  // }
+  @Patch(':id/star')
+  async handleStarFolder(
+    @Req() req: { user: { sub: string } },
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folder = await this.folderService.starFolder(sub, id);
+    return res.json({ folder, message: 'Folder starred successfully.' });
+  }
 
-  // @Delete(':id')
-  // async handleDeleteFolder(
-  //   @Req() req: { user: { sub: string } },
-  //   @Param('id') id: string,
-  //   @Res() res: Response,
-  // ): Promise<Response> {
-  //   const { sub } = req.user;
-  //   const folder = []
-  //   return res.json({ folder, message: 'Folder deleted successfully.' });
-  // }
+  @Patch(':id/unstar')
+  async handleUnStarFolder(
+    @Req() req: { user: { sub: string } },
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folder = await this.folderService.unstarFolder(sub, id);
+    return res.json({ folder, message: 'Folder unstarred successfully.' });
+  }
+
+  @Patch(':id/trash')
+  async handleTrashFolder(
+    @Req() req: { user: { sub: string } },
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folder = await this.folderService.trashFolder(sub, id);
+    return res.json({ folder, message: 'Folder moved to trash successfully.' });
+  }
+
+  @Patch(':id/restore')
+  async handleRestoreFolder(
+    @Req() req: { user: { sub: string } },
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const folder = await this.folderService.restoreFolder(sub, id);
+    return res.json({ folder, message: 'Folder restored successfully.' });
+  }
+
+  @Delete(':id')
+  async handleDeleteFolder(
+    @Req() req: { user: { sub: string } },
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    await this.folderService.deleteFolder(sub, id);
+    return res.json({ message: 'Folder deleted successfully.' });
+  }
 }

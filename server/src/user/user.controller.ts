@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('profile')
+  @Get('me')
   async handleGetProfile(
     @Req() req: { user: { sub: string } },
     @Res() res: Response,
@@ -16,5 +16,15 @@ export class UserController {
     const { sub } = req.user;
     const user = await this.userService.getProfile(sub);
     return res.json({ user });
+  }
+
+  @Get('storage')
+  async handleGetDiskSpace(
+    @Req() req: { user: { sub: string } },
+    @Res() res: Response,
+  ): Promise<Response> {
+    const { sub } = req.user;
+    const space = await this.userService.getDiskSpace(sub);
+    return res.json(space);
   }
 }

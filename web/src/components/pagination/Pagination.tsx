@@ -1,4 +1,6 @@
-export function Pagination() {
+export function Pagination({ isLoading = false }: { isLoading?: boolean }) {
+  if (isLoading) return null;
+
   return (
     <div className="join">
       <button className="join-item btn">«</button>

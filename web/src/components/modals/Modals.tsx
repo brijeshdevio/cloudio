@@ -1,4 +1,4 @@
-import { FileUpload } from "./FileUpload";
+// import { FileUpload } from "./FileUpload";
 import { ModalRoot } from "./ModalRoot";
 import { NewFolder } from "./NewFolder";
 
@@ -8,9 +8,9 @@ export function Modals() {
       <ModalRoot name="NewFolder">
         <NewFolder />
       </ModalRoot>
-      <ModalRoot name="NewFile">
+      {/* <ModalRoot name="NewFile">
         <FileUpload />
-      </ModalRoot>
+      </ModalRoot> */}
     </>
   );
 }

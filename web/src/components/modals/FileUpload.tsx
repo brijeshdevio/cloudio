@@ -28,7 +28,7 @@ export function FileUpload() {
 
     formData.append("file", file as Blob);
     const data = Object.fromEntries(formData.entries());
-    await mutateAsync(data as UploadFileType).finally(handleClose);
+    // await mutateAsync(data as UploadFileType).finally(handleClose);
   };
 
   return (

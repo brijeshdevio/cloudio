@@ -1,14 +1,14 @@
 import type { FormEvent } from "react";
 import { X } from "lucide-react";
 import { useModal } from "@/app/providers";
-import { useFolder } from "@/hooks/useFolder";
 import type { CreateFolderType } from "@/types";
 import { useParams } from "react-router-dom";
+import { useCreateFolder } from "@/queries/folder.queries";
 
 export function NewFolder() {
   const { modal } = useModal();
   const { FOLDER_ID } = useParams();
-  const { createFolderMutation } = useFolder();
+  const { mutateAsync, isPending } = useCreateFolder();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,9 +17,7 @@ export function NewFolder() {
     if (FOLDER_ID) {
       data.parent = FOLDER_ID;
     }
-    await createFolderMutation
-      .mutateAsync(data as unknown as CreateFolderType)
-      .finally(handleClose);
+    await mutateAsync(data as unknown as CreateFolderType).finally(handleClose);
   };
 
   const handleClose = () => modal("NewFolder", false);
@@ -55,9 +53,9 @@ export function NewFolder() {
             <button
               className="btn btn-sm btn-primary"
               type="submit"
-              disabled={createFolderMutation.isPending}
+              disabled={isPending}
             >
-              {createFolderMutation.isPending ? (
+              {isPending ? (
                 <span className="loading loading-spinner"></span>
               ) : (
                 "Create"

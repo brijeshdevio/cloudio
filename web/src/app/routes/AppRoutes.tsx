@@ -6,10 +6,10 @@ import {
   Login,
   MyDrive,
   Profile,
-  Recent,
+  // Recent,
   Signup,
-  Starred,
-  Trash,
+  // Starred,
+  // Trash,
 } from "@/pages";
 
 export function AppRoutes() {
@@ -23,10 +23,10 @@ export function AppRoutes() {
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/my-drive" element={<MyDrive />} />
-          <Route path="/my-drive/:FOLDER_ID" element={<MyDrive />} />
-          <Route path="/recent" element={<Recent />} />
+          <Route path="/my-drive/:folder_id" element={<MyDrive />} />
+          {/* <Route path="/recent" element={<Recent />} />
           <Route path="/starred" element={<Starred />} />
-          <Route path="/trash" element={<Trash />} />
+          <Route path="/trash" element={<Trash />} /> */}
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

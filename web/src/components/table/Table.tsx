@@ -10,7 +10,6 @@ import {
   Trash2,
 } from "lucide-react";
 import { formatByte, formatDate } from "@/utils";
-import { useOption } from "@/hooks/useOption";
 
 interface TableDataProps {
   _id: string;
@@ -29,15 +28,7 @@ interface OptionProps {
   isTrashed: boolean;
 }
 
-const Option = ({
-  id,
-  isFile = false,
-  starred = false,
-  isTrashed,
-}: OptionProps) => {
-  const { handleStarToggle, handleTrashToggle, isStarLoading, isTrashLoading } =
-    useOption();
-
+const Option = ({ starred = false, isTrashed }: OptionProps) => {
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
       <button className="btn btn-sm btn-ghost btn-circle">
@@ -57,8 +48,8 @@ const Option = ({
             </li>
             <li>
               <button
-                onClick={handleStarToggle(id, isFile, starred)}
-                disabled={isStarLoading}
+              // onClick={handleStarToggle(id, isFile, starred)}
+              // disabled={isStarLoading}
               >
                 <Star
                   className={`${starred ? "text-warning" : ""}`}
@@ -71,8 +62,8 @@ const Option = ({
         )}
         <li>
           <button
-            onClick={handleTrashToggle(id, isFile, isTrashed)}
-            disabled={isTrashLoading}
+          // onClick={handleTrashToggle(id, isFile, isTrashed)}
+          // disabled={isTrashLoading}
           >
             {isTrashed ? (
               <>

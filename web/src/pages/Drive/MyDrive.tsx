@@ -1,37 +1,69 @@
-import { useEffect } from "react";
-import { DriveHeader, DriveTable, Pagination } from "@/components";
-import { useFolder } from "@/hooks/useFolder";
-import { useParams } from "react-router-dom";
+import { File, Plus } from "lucide-react";
+import {
+  // Breadcrumb,
+  NotFoundItems,
+  Pagination,
+  Table,
+  TableBody,
+} from "@/components";
+import { useItemsView } from "@/queries/views.queries";
+import { useModal } from "@/app/providers";
+import type { ModalsType } from "@/types";
+
+function DriveHeader() {
+  const { modal } = useModal();
+
+  const handleOpenModal = (modalName: keyof ModalsType) => {
+    return () => {
+      modal(modalName, true);
+    };
+  };
+
+  return (
+    <div className="flex items-center justify-between">
+      <h2 className="text-2xl">MyDrive</h2>
+      <div className="flex items-center gap-3">
+        <button
+          className="btn rounded-2xl"
+          onClick={handleOpenModal("NewFolder")}
+        >
+          <Plus size={20} />
+          <span>New Folder</span>
+        </button>
+        <button
+          className="btn btn-primary rounded-2xl"
+          onClick={handleOpenModal("NewFile")}
+        >
+          <File size={20} />
+          <span>Upload</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export function MyDrive() {
-  const { FOLDER_ID } = useParams();
-  const { getFoldersQuery, getFolderQuery } = useFolder();
-
-  useEffect(() => {
-    if (FOLDER_ID) {
-      getFolderQuery.refetch();
-    } else {
-      getFoldersQuery.refetch();
-    }
-  }, [FOLDER_ID]);
-
-  const folders =
-    getFolderQuery.data?.subFolders || getFoldersQuery.data?.subFolders;
+  const { folders, files, isLoading } = useItemsView();
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">
       {/* Header */}
       <section>
-        <DriveHeader currentFolder={getFolderQuery.data?.folder} />
+        <DriveHeader />
+        {/* <Breadcrumb currentFolder={currentFolder} /> */}
       </section>
 
       {/* Items */}
       <section className="h-[60vh] overflow-y-scroll rounded-2xl">
-        <DriveTable items={folders} />
+        <Table isLoading={isLoading}>
+          <TableBody items={folders} />
+          <TableBody items={files} />
+        </Table>
+        <NotFoundItems hasItems={folders.length > 0 || files.length > 0} />
       </section>
 
       <section>
-        <Pagination />
+        <Pagination isLoading={isLoading} />
       </section>
     </div>
   );

@@ -5,8 +5,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getProfile } from "@/services/user.service";
 import type { AuthContextType, UserType } from "@/types";
+import { UserService } from "@/api/user.service";
 
 const initialState: AuthContextType = {
   user: null,
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadProfile = async function () {
       try {
-        const response = await getProfile();
+        const response = await UserService.getProfile();
         if (response?.user) {
           setUser(response.user);
           setIsAuthenticated(true);

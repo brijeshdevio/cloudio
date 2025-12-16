@@ -52,11 +52,20 @@ export type BreadcrumbType = {
 export type DriveTableProps = {
   _id: string;
   name: string;
-  size?: string;
+  size?: number;
   updatedAt: string;
 };
 
 export type UploadFileType = {
   file: File;
   folder?: string;
+};
+
+export type StarTableProps = {
+  _id: string;
+  name: string;
+  size?: number;
+  starred: boolean;
+  mimeType?: string;
+  updatedAt: string;
 };

@@ -1,6 +1,6 @@
 import { File, Plus } from "lucide-react";
 import {
-  // Breadcrumb,
+  Breadcrumb,
   NotFoundItems,
   Pagination,
   Table,
@@ -43,14 +43,14 @@ function DriveHeader() {
 }
 
 export function MyDrive() {
-  const { folders, files, isLoading } = useItemsView();
+  const { folders, files, isLoading, currentFolder } = useItemsView();
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">
       {/* Header */}
       <section>
         <DriveHeader />
-        {/* <Breadcrumb currentFolder={currentFolder} /> */}
+        <Breadcrumb currentFolder={currentFolder} />
       </section>
 
       {/* Items */}

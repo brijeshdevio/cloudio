@@ -1,23 +1,25 @@
 import type { FormEvent } from "react";
 import { X } from "lucide-react";
 import { useModal } from "@/app/providers";
-import type { CreateFolderType } from "@/types";
 import { useParams } from "react-router-dom";
 import { useCreateFolder } from "@/queries/folder.queries";
+import type { FolderForm } from "@/types/folder";
 
 export function NewFolder() {
   const { modal } = useModal();
-  const { FOLDER_ID } = useParams();
+  const { folder_id } = useParams();
   const { mutateAsync, isPending } = useCreateFolder();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    if (FOLDER_ID) {
-      data.parent = FOLDER_ID;
+    const data = Object.fromEntries(
+      formData.entries()
+    ) as unknown as FolderForm;
+    if (folder_id) {
+      data.parent = folder_id;
     }
-    await mutateAsync(data as unknown as CreateFolderType).finally(handleClose);
+    await mutateAsync(data).finally(handleClose);
   };
 
   const handleClose = () => modal("NewFolder", false);

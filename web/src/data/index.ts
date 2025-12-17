@@ -1,30 +1,28 @@
-function randomItem() {
-  const isFile = Math.random() > 0.5;
+import { Cloud, MonitorSmartphone, Shield, SquareMousePointer } from "lucide-react";
 
-  interface Item {
-    _id: string;
-    name: string;
-    isFile: boolean;
-    size?: number;
-    updatedAt: string;
-  }
-
-  const item: Item = {
-    _id: crypto.randomUUID(),
-    name: isFile
-      ? `file_${Math.floor(Math.random() * 1000)}.txt`
-      : `folder_${Math.floor(Math.random() * 1000)}`,
-    isFile,
-    updatedAt: String(new Date(Date.now() - Math.floor(Math.random() * 1e10))),
-  };
-
-  if (isFile) {
-    item.size = Math.floor(Math.random() * 5000) + 1; // random size in bytes
-  }
-
-  return item;
-}
-
-export function generateItems(count = 10) {
-  return Array.from({ length: count }, () => randomItem());
-}
+export const features = [
+  {
+    Icon: Cloud,
+    title: "Anywhere Access",
+    description:
+      "Access your documents, photos, and videos from your computer, smartphone, or tablet.",
+  },
+  {
+    Icon: Shield,
+    title: "Built-in Security",
+    description:
+      "Your files are protected by Google's advanced security infrastructure.",
+  },
+    {
+    Icon: SquareMousePointer,
+    title: "Seamless Integration",
+    description:
+      "Drive works with the tools you already use, making your workflow smoother than ever.",
+  },
+    {
+    Icon: MonitorSmartphone ,
+    title: "Cross-Device Syncing",
+    description:
+      "Work on your projects from any device – studio workstation, laptop on the go, or tablet in a client meeting.",
+  },
+];

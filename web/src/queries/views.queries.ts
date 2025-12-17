@@ -46,6 +46,14 @@ export const useItemsView = () => {
   };
 };
 
+export const useStarsView = () => {
+  return useQuery({
+    queryKey: ["stars"],
+    queryFn: () => ViewService.getStars(),
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useTrashView = () => {
   return useQuery({
     queryKey: ["trash"],

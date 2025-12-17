@@ -11,7 +11,12 @@ import {
 } from "lucide-react";
 import { formatByte, formatDate } from "@/utils";
 import { useModal } from "@/app/providers";
-import { useRestoreFolder, useTrashFolder } from "@/queries/folder.queries";
+import {
+  useRestoreFolder,
+  useStarFolder,
+  useTrashFolder,
+  useUnstarFolder,
+} from "@/queries/folder.queries";
 
 interface TableDataProps {
   _id: string;
@@ -26,6 +31,9 @@ interface TableDataProps {
 const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
   const [_, setSearchParams] = useSearchParams();
   const { modal } = useModal();
+  const { isPending: isPendingStar, mutate: mutateStar } = useStarFolder();
+  const { isPending: isPendingUnstar, mutate: mutateUnstar } =
+    useUnstarFolder();
   const { isPending: isPendingTrash, mutate: mutateTrash } = useTrashFolder();
   const { isPending: isPendingRestore, mutate: mutateRestore } =
     useRestoreFolder();
@@ -38,6 +46,8 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
     modal("RenameFolder", true);
   };
 
+  const handleClickStar = () => mutateStar(_id);
+  const handleClickUnstar = () => mutateUnstar(_id);
   const handleClickTrash = () => mutateTrash(_id);
   const handleClickRestore = () => mutateRestore(_id);
 
@@ -59,16 +69,30 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
               </button>
             </li>
             <li>
-              <button
-              // onClick={handleStarToggle(id, isFile, starred)}
-              // disabled={isStarLoading}
-              >
-                <Star
-                  className={`${starred ? "text-warning" : ""}`}
-                  size={15}
-                />
-                <span>Star</span>
-              </button>
+              {starred ? (
+                <>
+                  <button
+                    onClick={handleClickUnstar}
+                    disabled={isPendingUnstar}
+                  >
+                    <Star
+                      className={`${starred ? "text-warning" : ""}`}
+                      size={15}
+                    />
+                    <span>Star</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={handleClickStar} disabled={isPendingStar}>
+                    <Star
+                      className={`${starred ? "text-warning" : ""}`}
+                      size={15}
+                    />
+                    <span>Star</span>
+                  </button>
+                </>
+              )}
             </li>
           </>
         )}

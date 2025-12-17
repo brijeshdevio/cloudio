@@ -5,5 +5,7 @@ export const ViewService = {
 
   getItem: async (id: string) => (await http.get(`/folders/${id}`)).data,
 
+  getStars: async () => (await http.get(`/stars`)).data,
+
   getTrash: async () => (await http.get(`/trash`)).data,
 };

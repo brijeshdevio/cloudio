@@ -6,6 +6,7 @@ const initialState: ModalContextType = {
   modals: {
     NewFolder: false,
     NewFile: false,
+    RenameFolder: false,
   },
 };
 

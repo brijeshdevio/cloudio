@@ -2,6 +2,7 @@
 export type ModalsType = {
   NewFolder: boolean;
   NewFile: boolean;
+  RenameFolder: boolean;
 };
 
 export type ModalContextType = {

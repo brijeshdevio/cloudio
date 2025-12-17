@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   ArchiveRestore,
   ArchiveX,
@@ -10,6 +10,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { formatByte, formatDate } from "@/utils";
+import { useModal } from "@/app/providers";
 
 interface TableDataProps {
   _id: string;
@@ -21,14 +22,18 @@ interface TableDataProps {
   updatedAt: string;
 }
 
-interface OptionProps {
-  id: string;
-  isFile: boolean;
-  starred: boolean;
-  isTrashed: boolean;
-}
+const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
+  const [_, setSearchParams] = useSearchParams();
+  const { modal } = useModal();
 
-const Option = ({ starred = false, isTrashed }: OptionProps) => {
+  const handleRenameClick = () => {
+    const query = new URLSearchParams();
+    query.set("folder_id", _id);
+    query.set("folder_name", name);
+    setSearchParams(query);
+    modal("RenameFolder", true);
+  };
+
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
       <button className="btn btn-sm btn-ghost btn-circle">
@@ -38,10 +43,10 @@ const Option = ({ starred = false, isTrashed }: OptionProps) => {
         tabIndex={0}
         className="dropdown-content menu bg-base-300 rounded-box z-1 w-32 p-2 shadow-lg gap-1 border border-white/10"
       >
-        {!isTrashed && (
+        {!trashed && (
           <>
             <li>
-              <button>
+              <button onClick={handleRenameClick}>
                 <Edit className="text-success" size={15} />
                 <span>Rename</span>
               </button>
@@ -62,10 +67,10 @@ const Option = ({ starred = false, isTrashed }: OptionProps) => {
         )}
         <li>
           <button
-          // onClick={handleTrashToggle(id, isFile, isTrashed)}
+          // onClick={handleTrashToggle(id, isFile, trashed)}
           // disabled={isTrashLoading}
           >
-            {isTrashed ? (
+            {trashed ? (
               <>
                 <ArchiveRestore size={15} />
                 <span>Restore</span>
@@ -102,50 +107,40 @@ function TableHead() {
   );
 }
 
-function TableData({
-  _id,
-  name,
-  size,
-  updatedAt,
-  starred,
-  trashed,
-}: TableDataProps) {
+function TableData(props: TableDataProps) {
   return (
     <tr className="group hover:bg-base-300">
       <td className="flex items-center gap-2">
-        {size ? (
+        {props.size ? (
           <Link
-            to={`#${_id}`}
+            to={`#${props._id}`}
             className="flex items-center gap-2 cursor-pointer hover:link"
           >
             <Image size={20} />
-            <span className="line-clamp-1">{name}</span>
+            <span className="line-clamp-1">{props.name}</span>
           </Link>
         ) : (
           <>
             <Link
-              to={`/my-drive/${_id}`}
+              to={`/my-drive/${props._id}`}
               className="flex items-center gap-2 cursor-pointer hover:link line-clamp-1"
             >
               <Folder size={20} />
-              {name}
+              {props.name}
             </Link>
           </>
         )}
       </td>
       <td>
-        <span>{formatDate(updatedAt)}</span>
+        <span>{formatDate(props.updatedAt)}</span>
       </td>
       <td>
-        <span className="line-clamp-1">{size ? formatByte(size) : "__"}</span>
+        <span className="line-clamp-1">
+          {props.size ? formatByte(props.size) : "__"}
+        </span>
       </td>
       <td>
-        <Option
-          id={_id}
-          isFile={!!size}
-          starred={starred}
-          isTrashed={!!trashed}
-        />
+        <Option {...props} />
       </td>
     </tr>
   );

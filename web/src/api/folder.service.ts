@@ -9,4 +9,7 @@ export const FolderService = {
     (await http.put(`/folders/${id}`, formData)).data,
 
   trash: async (id: string) => (await http.patch(`/folders/${id}/trash`)).data,
+
+  restore: async (id: string) =>
+    (await http.patch(`/folders/${id}/restore`)).data,
 };

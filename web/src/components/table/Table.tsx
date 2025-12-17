@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { formatByte, formatDate } from "@/utils";
 import { useModal } from "@/app/providers";
-import { useTrashFolder } from "@/queries/folder.queries";
+import { useRestoreFolder, useTrashFolder } from "@/queries/folder.queries";
 
 interface TableDataProps {
   _id: string;
@@ -26,7 +26,9 @@ interface TableDataProps {
 const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
   const [_, setSearchParams] = useSearchParams();
   const { modal } = useModal();
-  const { isPending, mutate } = useTrashFolder();
+  const { isPending: isPendingTrash, mutate: mutateTrash } = useTrashFolder();
+  const { isPending: isPendingRestore, mutate: mutateRestore } =
+    useRestoreFolder();
 
   const handleRenameClick = () => {
     const query = new URLSearchParams();
@@ -36,7 +38,8 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
     modal("RenameFolder", true);
   };
 
-  const handleTrashClick = () => mutate(_id);
+  const handleClickTrash = () => mutateTrash(_id);
+  const handleClickRestore = () => mutateRestore(_id);
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
@@ -70,19 +73,21 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
           </>
         )}
         <li>
-          <button onClick={handleTrashClick} disabled={isPending}>
-            {trashed ? (
-              <>
+          {trashed ? (
+            <>
+              <button onClick={handleClickRestore} disabled={isPendingRestore}>
                 <ArchiveRestore size={15} />
                 <span>Restore</span>
-              </>
-            ) : (
-              <>
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={handleClickTrash} disabled={isPendingTrash}>
                 <ArchiveX size={15} />
                 <span>Trash</span>
-              </>
-            )}
-          </button>
+              </button>
+            </>
+          )}
         </li>
         <li>
           <button>

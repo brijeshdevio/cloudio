@@ -3,7 +3,7 @@ import type { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { FolderService } from "@/api/folder.service";
 import { errorHandler } from "@/utils";
-import { useItemsView } from "./views.queries";
+import { useItemsView, useTrashView } from "./views.queries";
 import { useParams } from "react-router-dom";
 import type { FolderForm, RenameFolderForm } from "@/types/folder";
 
@@ -60,6 +60,20 @@ export const useTrashFolder = () => {
       } else {
         itemsQuery.refetch();
       }
+    },
+    onError: errorHandler,
+  });
+};
+
+export const useRestoreFolder = () => {
+  const { refetch } = useTrashView();
+
+  return useMutation({
+    mutationKey: ["restore-folder"],
+    mutationFn: (id: string) => FolderService.restore(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      refetch();
     },
     onError: errorHandler,
   });

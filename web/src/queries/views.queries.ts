@@ -45,3 +45,11 @@ export const useItemsView = () => {
     itemQuery,
   };
 };
+
+export const useTrashView = () => {
+  return useQuery({
+    queryKey: ["trash"],
+    queryFn: () => ViewService.getTrash(),
+    refetchOnWindowFocus: false,
+  });
+};

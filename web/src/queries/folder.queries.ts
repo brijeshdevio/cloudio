@@ -45,3 +45,22 @@ export const useRenameFolder = () => {
     onError: errorHandler,
   });
 };
+
+export const useTrashFolder = () => {
+  const { itemsQuery, itemQuery } = useItemsView();
+  const { folder_id } = useParams();
+
+  return useMutation({
+    mutationKey: ["trash-folder"],
+    mutationFn: (id: string) => FolderService.trash(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      if (folder_id) {
+        itemQuery.refetch();
+      } else {
+        itemsQuery.refetch();
+      }
+    },
+    onError: errorHandler,
+  });
+};

@@ -9,6 +9,8 @@ import {
 import { useItemsView } from "@/queries/views.queries";
 import { useModal } from "@/app/providers";
 import type { ModalsType } from "@/types";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 function DriveHeader() {
   const { modal } = useModal();
@@ -43,7 +45,24 @@ function DriveHeader() {
 }
 
 export function MyDrive() {
-  const { folders, files, isLoading, currentFolder } = useItemsView();
+  const { folder_id } = useParams();
+  const {
+    folders,
+    files,
+    isLoading,
+    currentFolder,
+    refetchItems,
+    refetchItem,
+  } = useItemsView();
+
+  useEffect(() => {
+    if (!folder_id && location.pathname === "/my-drive") refetchItems();
+  }, [refetchItems, folder_id]);
+
+  useEffect(() => {
+    if (folder_id && location.pathname === "/my-drive/" + folder_id)
+      refetchItem();
+  }, [refetchItem, folder_id]);
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">

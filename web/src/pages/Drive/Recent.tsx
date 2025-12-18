@@ -1,8 +1,13 @@
 import { NotFoundItems, Pagination, Table, TableBody } from "@/components";
 import { useRecentView } from "@/queries/views.queries";
+import { useEffect } from "react";
 
 export function Recent() {
-  const { data, isPending } = useRecentView();
+  const { data, isPending, refetch } = useRecentView();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">

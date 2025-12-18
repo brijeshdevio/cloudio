@@ -1,8 +1,13 @@
 import { NotFoundItems, Pagination, Table, TableBody } from "@/components";
 import { useTrashView } from "@/queries/views.queries";
+import { useEffect } from "react";
 
 export function Trash() {
-  const { data, isPending } = useTrashView();
+  const { data, isPending, refetch } = useTrashView();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <div className="w-full sm:w-[90%] flex flex-col gap-4 mx-auto px-3 py-6">

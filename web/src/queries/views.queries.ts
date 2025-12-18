@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ViewService } from "@/api/view.service";
@@ -27,22 +26,13 @@ export const useItemsView = () => {
   const files = itemQuery.data?.files || itemsQuery.data?.files || [];
   const currentFolder = itemQuery.data?.folder;
 
-  useEffect(() => {
-    if (!folder_id && location.pathname == "/my-drive") refetchItems();
-  }, [refetchItems, folder_id]);
-
-  useEffect(() => {
-    if (folder_id && location.pathname == "/my-drive/" + folder_id)
-      refetchItem();
-  }, [refetchItem, folder_id]);
-
   return {
     folders,
     files,
     isLoading: itemsQuery.isPending,
     currentFolder,
-    itemsQuery,
-    itemQuery,
+    refetchItem,
+    refetchItems,
   };
 };
 
@@ -51,6 +41,7 @@ export const useRecentView = () => {
     queryKey: ["recent"],
     queryFn: () => ViewService.getRecent(),
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 };
 
@@ -59,6 +50,7 @@ export const useStarsView = () => {
     queryKey: ["stars"],
     queryFn: () => ViewService.getStars(),
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 };
 
@@ -67,5 +59,6 @@ export const useTrashView = () => {
     queryKey: ["trash"],
     queryFn: () => ViewService.getTrash(),
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 };

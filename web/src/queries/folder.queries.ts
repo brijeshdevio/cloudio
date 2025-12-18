@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import type { FolderForm, RenameFolderForm } from "@/types/folder";
 
 export const useCreateFolder = () => {
-  const { itemsQuery, itemQuery } = useItemsView();
+  const { refetchItem, refetchItems } = useItemsView();
   const { folder_id } = useParams();
 
   return useMutation({
@@ -22,9 +22,9 @@ export const useCreateFolder = () => {
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
       if (folder_id) {
-        itemQuery.refetch();
+        refetchItem();
       } else {
-        itemsQuery.refetch();
+        refetchItems();
       }
     },
     onError: errorHandler,
@@ -32,7 +32,7 @@ export const useCreateFolder = () => {
 };
 
 export const useRenameFolder = () => {
-  const { itemsQuery, itemQuery } = useItemsView();
+  const { refetchItem, refetchItems } = useItemsView();
   const { folder_id } = useParams();
 
   return useMutation({
@@ -42,9 +42,9 @@ export const useRenameFolder = () => {
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
       if (folder_id) {
-        itemQuery.refetch();
+        refetchItem();
       } else {
-        itemsQuery.refetch();
+        refetchItems();
       }
     },
     onError: errorHandler,
@@ -77,7 +77,7 @@ export const useUnstarFolder = () => {
 };
 
 export const useTrashFolder = () => {
-  const { itemsQuery, itemQuery } = useItemsView();
+ const { refetchItem, refetchItems } = useItemsView();
   const { folder_id } = useParams();
 
   return useMutation({
@@ -86,9 +86,9 @@ export const useTrashFolder = () => {
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
       if (folder_id) {
-        itemQuery.refetch();
+        refetchItem();
       } else {
-        itemsQuery.refetch();
+        refetchItems();
       }
     },
     onError: errorHandler,
@@ -114,15 +114,15 @@ export const useDeleteFolder = () => {
   const { refetch: refetchTrash } = useTrashView();
   const { refetch: refetchStar } = useStarsView();
   const { refetch: refetchRecent } = useRecentView();
-  const { itemQuery, itemsQuery } = useItemsView();
+ const { refetchItem, refetchItems } = useItemsView();
 
   return useMutation({
     mutationKey: ["delete-folder"],
     mutationFn: (id: string) => FolderService.delete(id),
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
-      if (folder_id) itemQuery.refetch();
-      if (location.pathname === "/my-drive") itemsQuery.refetch();
+      if (folder_id) refetchItem();
+      if (location.pathname === "/my-drive") refetchItems();
       if (location.pathname === "/starred") refetchStar();
       if (location.pathname === "/trash") refetchTrash();
       if (location.pathname === "/recent") refetchRecent();

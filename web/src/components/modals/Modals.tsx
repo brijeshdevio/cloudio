@@ -1,4 +1,4 @@
-// import { FileUpload } from "./FileUpload";
+import { FileUpload } from "./FileUpload";
 import { ModalRoot } from "./ModalRoot";
 import { NewFolder } from "./NewFolder";
 import { RenameFolder } from "./RenameFolder";
@@ -12,9 +12,9 @@ export function Modals() {
       <ModalRoot name="RenameFolder">
         <RenameFolder />
       </ModalRoot>
-      {/* <ModalRoot name="NewFile">
+      <ModalRoot name="NewFile">
         <FileUpload />
-      </ModalRoot> */}
+      </ModalRoot>
     </>
   );
 }

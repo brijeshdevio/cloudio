@@ -1,17 +1,18 @@
-import { CloudUpload, X } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { useModal } from "@/app/providers";
 import { useRef, useState, type FormEvent } from "react";
-import { useFile } from "@/hooks/useFile";
-import type { UploadFileType } from "@/types";
+import { useParams } from "react-router-dom";
+import { CloudUpload, X } from "lucide-react";
+import { useModal } from "@/app/providers";
+import { useUploadFile } from "@/queries/file.queries";
+import type { FileForm } from "@/types/file";
 
 export function FileUpload() {
-  const { FOLDER_ID } = useParams();
-  const { modal } = useModal();
-  const [file, setFile] = useState<File | null>(null);
-  const { mutateAsync, isPending } = useFile().uploadFileMutation;
-  const handleClose = () => modal("NewFile", false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const { folder_id } = useParams();
+  const { isPending, mutateAsync } = useUploadFile();
+  const { modal } = useModal();
+
+  const handleClose = () => modal("NewFile", false);
 
   const handleSelectFile = () => {
     if (fileRef.current) {
@@ -22,13 +23,12 @@ export function FileUpload() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    if (FOLDER_ID) {
-      formData.append("folder", FOLDER_ID);
+    if (folder_id) {
+      formData.append("folder", folder_id);
     }
-
     formData.append("file", file as Blob);
     const data = Object.fromEntries(formData.entries());
-    // await mutateAsync(data as UploadFileType).finally(handleClose);
+    await mutateAsync(data as unknown as FileForm).finally(handleClose);
   };
 
   return (

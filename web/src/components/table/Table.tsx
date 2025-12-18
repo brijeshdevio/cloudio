@@ -146,17 +146,26 @@ function TableHead() {
 }
 
 function TableData(props: TableDataProps) {
+  const [_, setSearchParams] = useSearchParams();
+  const { modal } = useModal();
+
+  const handleClickPreview = () => {
+    const query = new URLSearchParams();
+    query.set("file_id", props._id);
+    setSearchParams(query);
+    modal("Preview", true);
+  };
   return (
     <tr className="group hover:bg-base-300">
       <td className="flex items-center gap-2">
         {props.size ? (
-          <Link
-            to={`#${props._id}`}
+          <span
+            onClick={handleClickPreview}
             className="flex items-center gap-2 cursor-pointer hover:link"
           >
             <Image size={20} />
             <span className="line-clamp-1">{props.name}</span>
-          </Link>
+          </span>
         ) : (
           <>
             <Link

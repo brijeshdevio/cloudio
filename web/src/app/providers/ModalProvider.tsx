@@ -7,6 +7,7 @@ const initialState: ModalContextType = {
     NewFolder: false,
     NewFile: false,
     RenameFolder: false,
+    Preview: false,
   },
 };
 

@@ -46,6 +46,14 @@ export const useItemsView = () => {
   };
 };
 
+export const useRecentView = () => {
+  return useQuery({
+    queryKey: ["recent"],
+    queryFn: () => ViewService.getRecent(),
+    refetchOnWindowFocus: false,
+  });
+};
+
 export const useStarsView = () => {
   return useQuery({
     queryKey: ["stars"],

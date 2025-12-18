@@ -3,7 +3,12 @@ import type { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { FolderService } from "@/api/folder.service";
 import { errorHandler } from "@/utils";
-import { useItemsView, useStarsView, useTrashView } from "./views.queries";
+import {
+  useItemsView,
+  useRecentView,
+  useStarsView,
+  useTrashView,
+} from "./views.queries";
 import { useParams } from "react-router-dom";
 import type { FolderForm, RenameFolderForm } from "@/types/folder";
 
@@ -108,6 +113,7 @@ export const useDeleteFolder = () => {
   const { folder_id } = useParams();
   const { refetch: refetchTrash } = useTrashView();
   const { refetch: refetchStar } = useStarsView();
+  const { refetch: refetchRecent } = useRecentView();
   const { itemQuery, itemsQuery } = useItemsView();
 
   return useMutation({
@@ -119,6 +125,7 @@ export const useDeleteFolder = () => {
       if (location.pathname === "/my-drive") itemsQuery.refetch();
       if (location.pathname === "/starred") refetchStar();
       if (location.pathname === "/trash") refetchTrash();
+      if (location.pathname === "/recent") refetchRecent();
     },
     onError: errorHandler,
   });

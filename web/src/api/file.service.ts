@@ -10,4 +10,6 @@ export const FileService = {
         },
       })
     ).data,
+
+  getById: async (id: string) => (await http.get(`/files/${id}`)).data,
 };

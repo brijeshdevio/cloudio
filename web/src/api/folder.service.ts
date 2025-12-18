@@ -10,10 +10,13 @@ export const FolderService = {
 
   star: async (id: string) => (await http.patch(`/folders/${id}/star`)).data,
 
-  unstar: async (id: string) => (await http.patch(`/folders/${id}/unstar`)).data,
+  unstar: async (id: string) =>
+    (await http.patch(`/folders/${id}/unstar`)).data,
 
   trash: async (id: string) => (await http.patch(`/folders/${id}/trash`)).data,
 
   restore: async (id: string) =>
     (await http.patch(`/folders/${id}/restore`)).data,
+
+  delete: async (id: string) => (await http.delete(`/folders/${id}`)).data,
 };

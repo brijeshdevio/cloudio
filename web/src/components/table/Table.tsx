@@ -12,6 +12,7 @@ import {
 import { formatByte, formatDate } from "@/utils";
 import { useModal } from "@/app/providers";
 import {
+  useDeleteFolder,
   useRestoreFolder,
   useStarFolder,
   useTrashFolder,
@@ -37,6 +38,8 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
   const { isPending: isPendingTrash, mutate: mutateTrash } = useTrashFolder();
   const { isPending: isPendingRestore, mutate: mutateRestore } =
     useRestoreFolder();
+  const { isPending: isPendingDelete, mutate: mutateDelete } =
+    useDeleteFolder();
 
   const handleRenameClick = () => {
     const query = new URLSearchParams();
@@ -50,6 +53,11 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
   const handleClickUnstar = () => mutateUnstar(_id);
   const handleClickTrash = () => mutateTrash(_id);
   const handleClickRestore = () => mutateRestore(_id);
+  const handleClickDelete = () => {
+    if (window.confirm("Are you sure you want to delete this folder?")) {
+      mutateDelete(_id);
+    }
+  };
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
@@ -114,7 +122,7 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
           )}
         </li>
         <li>
-          <button>
+          <button onClick={handleClickDelete} disabled={isPendingDelete}>
             <Trash2 className="text-error" size={15} />
             <span>Delete</span>
           </button>

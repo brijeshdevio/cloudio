@@ -103,3 +103,23 @@ export const useRestoreFolder = () => {
     onError: errorHandler,
   });
 };
+
+export const useDeleteFolder = () => {
+  const { folder_id } = useParams();
+  const { refetch: refetchTrash } = useTrashView();
+  const { refetch: refetchStar } = useStarsView();
+  const { itemQuery, itemsQuery } = useItemsView();
+
+  return useMutation({
+    mutationKey: ["delete-folder"],
+    mutationFn: (id: string) => FolderService.delete(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      if (folder_id) itemQuery.refetch();
+      if (location.pathname === "/my-drive") itemsQuery.refetch();
+      if (location.pathname === "/starred") refetchStar();
+      if (location.pathname === "/trash") refetchTrash();
+    },
+    onError: errorHandler,
+  });
+};

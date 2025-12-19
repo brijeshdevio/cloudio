@@ -12,4 +12,8 @@ export const FileService = {
     ).data,
 
   getById: async (id: string) => (await http.get(`/files/${id}`)).data,
+
+  star: async (id: string) => (await http.patch(`/files/${id}/star`)).data,
+
+  unstar: async (id: string) => (await http.patch(`/files/${id}/unstar`)).data,
 };

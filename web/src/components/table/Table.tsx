@@ -18,6 +18,7 @@ import {
   useTrashFolder,
   useUnstarFolder,
 } from "@/queries/folder.queries";
+import { useStarFile, useUnstarFile } from "@/queries/file.queries";
 
 interface TableDataProps {
   _id: string;
@@ -29,7 +30,7 @@ interface TableDataProps {
   updatedAt: string;
 }
 
-const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
+const FolderOption = ({ _id, name, trashed, starred }: TableDataProps) => {
   const [_, setSearchParams] = useSearchParams();
   const { modal } = useModal();
   const { isPending: isPendingStar, mutate: mutateStar } = useStarFolder();
@@ -132,6 +133,86 @@ const Option = ({ _id, name, trashed, starred }: TableDataProps) => {
   );
 };
 
+const FileOption = ({ _id, trashed, starred }: TableDataProps) => {
+  const { isPending: isPendingStar, mutate: mutateStar } = useStarFile();
+  const { isPending: isPendingUnstar, mutate: mutateUnstar } = useUnstarFile();
+
+  const handleClickStar = () => mutateStar(_id);
+  const handleClickUnstar = () => mutateUnstar(_id);
+
+  return (
+    <div className="dropdown dropdown-bottom dropdown-end">
+      <button className="btn btn-sm btn-ghost btn-circle">
+        <EllipsisVertical size={20} />
+      </button>
+      <ul
+        tabIndex={0}
+        className="dropdown-content menu bg-base-300 rounded-box z-1 w-32 p-2 shadow-lg gap-1 border border-white/10"
+      >
+        {!trashed && (
+          <>
+            <li>
+              <button>
+                <Edit className="text-success" size={15} />
+                <span>Rename</span>
+              </button>
+            </li>
+            <li>
+              {starred ? (
+                <>
+                  <button
+                    onClick={handleClickUnstar}
+                    disabled={isPendingUnstar}
+                  >
+                    <Star
+                      className={`${starred ? "text-warning" : ""}`}
+                      size={15}
+                    />
+                    <span>Star</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button onClick={handleClickStar} disabled={isPendingStar}>
+                    <Star
+                      className={`${starred ? "text-text" : ""}`}
+                      size={15}
+                    />
+                    <span>Star</span>
+                  </button>
+                </>
+              )}
+            </li>
+          </>
+        )}
+        <li>
+          {trashed ? (
+            <>
+              <button>
+                <ArchiveRestore size={15} />
+                <span>Restore</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button>
+                <ArchiveX size={15} />
+                <span>Trash</span>
+              </button>
+            </>
+          )}
+        </li>
+        <li>
+          <button>
+            <Trash2 className="text-error" size={15} />
+            <span>Delete</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
 function TableHead() {
   return (
     <thead>
@@ -155,6 +236,7 @@ function TableData(props: TableDataProps) {
     setSearchParams(query);
     modal("Preview", true);
   };
+
   return (
     <tr className="group hover:bg-base-300">
       <td className="flex items-center gap-2">
@@ -187,7 +269,7 @@ function TableData(props: TableDataProps) {
         </span>
       </td>
       <td>
-        <Option {...props} />
+        {props.size ? <FileOption {...props} /> : <FolderOption {...props} />}
       </td>
     </tr>
   );

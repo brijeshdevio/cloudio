@@ -5,7 +5,7 @@ import type { AxiosResponse } from "axios";
 import { FileService } from "@/api/file.service";
 import type { FileForm, RenameFileForm } from "@/types/file";
 import { errorHandler } from "@/utils";
-import { useItemsView, useStarsView } from "./views.queries";
+import { useItemsView, useStarsView, useTrashView } from "./views.queries";
 
 export const useUploadFile = () => {
   const { folder_id } = useParams();
@@ -78,6 +78,39 @@ export const useUnstarFile = () => {
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
       if (location.pathname === "/starred") refetch();
+    },
+    onError: errorHandler,
+  });
+};
+
+export const useTrashFile = () => {
+ const { refetchItem, refetchItems } = useItemsView();
+  const { folder_id } = useParams();
+
+  return useMutation({
+    mutationKey: ["trash-file"],
+    mutationFn: (id: string) => FileService.trash(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      if (folder_id) {
+        refetchItem();
+      } else {
+        refetchItems();
+      }
+    },
+    onError: errorHandler,
+  });
+};
+
+export const useRestoreFile = () => {
+  const { refetch } = useTrashView();
+
+  return useMutation({
+    mutationKey: ["restore-file"],
+    mutationFn: (id: string) => FileService.restore(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      refetch();
     },
     onError: errorHandler,
   });

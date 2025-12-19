@@ -18,7 +18,12 @@ import {
   useTrashFolder,
   useUnstarFolder,
 } from "@/queries/folder.queries";
-import { useStarFile, useUnstarFile } from "@/queries/file.queries";
+import {
+  useRestoreFile,
+  useStarFile,
+  useTrashFile,
+  useUnstarFile,
+} from "@/queries/file.queries";
 
 interface TableDataProps {
   _id: string;
@@ -138,9 +143,14 @@ const FileOption = ({ _id, name, trashed, starred }: TableDataProps) => {
   const { modal } = useModal();
   const { isPending: isPendingStar, mutate: mutateStar } = useStarFile();
   const { isPending: isPendingUnstar, mutate: mutateUnstar } = useUnstarFile();
+  const { isPending: isPendingTrash, mutate: mutateTrash } = useTrashFile();
+  const { isPending: isPendingRestore, mutate: mutateRestore } =
+    useRestoreFile();
 
   const handleClickStar = () => mutateStar(_id);
   const handleClickUnstar = () => mutateUnstar(_id);
+  const handleClickTrash = () => mutateTrash(_id);
+  const handleClickRestore = () => mutateRestore(_id);
 
   const handleRenameClick = () => {
     const query = new URLSearchParams();
@@ -198,14 +208,14 @@ const FileOption = ({ _id, name, trashed, starred }: TableDataProps) => {
         <li>
           {trashed ? (
             <>
-              <button>
+              <button onClick={handleClickRestore} disabled={isPendingRestore}>
                 <ArchiveRestore size={15} />
                 <span>Restore</span>
               </button>
             </>
           ) : (
             <>
-              <button>
+              <button onClick={handleClickTrash} disabled={isPendingTrash}>
                 <ArchiveX size={15} />
                 <span>Trash</span>
               </button>

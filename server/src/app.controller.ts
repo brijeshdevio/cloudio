@@ -13,6 +13,16 @@ export class AppController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('items')
+  async handleGetItems(
+    @Req() req: { user: { sub: string } },
+    @Res() res: Response,
+  ): Promise<Response> {
+    const items = await this.appService.getItems(req.user.sub);
+    return res.json(items);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('stars')
   async handleGetStarItems(
     @Req() req: { user: { sub: string } },

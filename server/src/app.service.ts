@@ -17,6 +17,27 @@ export class AppService {
     return 'Welcome to Cloudio API!';
   }
 
+  async getItems(owner: string): Promise<{
+    folders: Folder[];
+    files: File[];
+  }> {
+    const folders = await this.folderModel
+      .find({ owner, parent: null, trashed: false })
+      .lean()
+      .select('_id name createdAt starred updatedAt')
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    const files = await this.fileModel
+      .find({ owner, folder: null, trashed: false })
+      .lean()
+      .select('_id name createdAt starred updatedAt size mimeType')
+      .sort({ createdAt: -1 })
+      .limit(20);
+
+    return { folders, files };
+  }
+
   async getStarredItems(owner: string): Promise<{
     folders: Folder[];
     files: File[];
@@ -73,7 +94,7 @@ export class AppService {
     const files = await this.fileModel
       .find({ owner, trashed: true })
       .lean()
-      .select('_id name starred updatedAt size mimeType')
+      .select('_id name starred updatedAt size mimeType trashed')
       .sort({ updatedAt: -1 })
       .limit(20);
 

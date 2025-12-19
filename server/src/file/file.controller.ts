@@ -144,7 +144,10 @@ export class FileController {
       id,
       body.newName,
     );
-    return res.json({ file: renamedFile });
+    return res.json({
+      file: renamedFile,
+      message: 'File renamed successfully',
+    });
   }
 
   @Patch(':id/star')
@@ -155,7 +158,10 @@ export class FileController {
   ): Promise<Response> {
     const owner = req.user.sub;
     const starredFile = await this.fileService.starFile(owner, id);
-    return res.json({ file: starredFile });
+    return res.json({
+      file: starredFile,
+      message: 'File starred successfully',
+    });
   }
 
   @Patch(':id/unstar')
@@ -166,7 +172,10 @@ export class FileController {
   ): Promise<Response> {
     const owner = req.user.sub;
     const unstarredFile = await this.fileService.unstarFile(owner, id);
-    return res.json({ file: unstarredFile });
+    return res.json({
+      file: unstarredFile,
+      message: 'File unstarred successfully',
+    });
   }
 
   @Patch(':id/trash')
@@ -177,7 +186,10 @@ export class FileController {
   ): Promise<Response> {
     const owner = req.user.sub;
     const trashedFile = await this.fileService.trashFile(owner, id);
-    return res.json({ file: trashedFile });
+    return res.json({
+      file: trashedFile,
+      message: 'File trashed successfully',
+    });
   }
 
   @Patch(':id/restore')
@@ -188,7 +200,10 @@ export class FileController {
   ): Promise<Response> {
     const owner = req.user.sub;
     const restoredFile = await this.fileService.restoreFile(owner, id);
-    return res.json({ file: restoredFile });
+    return res.json({
+      file: restoredFile,
+      message: 'File restored successfully',
+    });
   }
 
   @Delete(':id')

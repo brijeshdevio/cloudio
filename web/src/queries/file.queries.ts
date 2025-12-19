@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import type { AxiosResponse } from "axios";
 import { FileService } from "@/api/file.service";
-import type { FileForm } from "@/types/file";
+import type { FileForm, RenameFileForm } from "@/types/file";
 import { errorHandler } from "@/utils";
 import { useItemsView, useStarsView } from "./views.queries";
 
@@ -35,6 +35,26 @@ export const useGetFile = () => {
     queryFn: () => FileService.getById(fileId!),
     enabled: false,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useRenameFile = () => {
+  const { refetchItem, refetchItems } = useItemsView();
+  const { folder_id } = useParams();
+
+  return useMutation({
+    mutationKey: ["rename-folder"],
+    mutationFn: (data: RenameFileForm) =>
+      FileService.update(data.id, { newName: data.name }),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      if (folder_id) {
+        refetchItem();
+      } else {
+        refetchItems();
+      }
+    },
+    onError: errorHandler,
   });
 };
 

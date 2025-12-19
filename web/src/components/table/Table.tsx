@@ -133,12 +133,22 @@ const FolderOption = ({ _id, name, trashed, starred }: TableDataProps) => {
   );
 };
 
-const FileOption = ({ _id, trashed, starred }: TableDataProps) => {
+const FileOption = ({ _id, name, trashed, starred }: TableDataProps) => {
+  const [_, setSearchParams] = useSearchParams();
+  const { modal } = useModal();
   const { isPending: isPendingStar, mutate: mutateStar } = useStarFile();
   const { isPending: isPendingUnstar, mutate: mutateUnstar } = useUnstarFile();
 
   const handleClickStar = () => mutateStar(_id);
   const handleClickUnstar = () => mutateUnstar(_id);
+
+  const handleRenameClick = () => {
+    const query = new URLSearchParams();
+    query.set("file_id", _id);
+    query.set("file_name", name);
+    setSearchParams(query);
+    modal("RenameFile", true);
+  };
 
   return (
     <div className="dropdown dropdown-bottom dropdown-end">
@@ -152,7 +162,7 @@ const FileOption = ({ _id, trashed, starred }: TableDataProps) => {
         {!trashed && (
           <>
             <li>
-              <button>
+              <button onClick={handleRenameClick}>
                 <Edit className="text-success" size={15} />
                 <span>Rename</span>
               </button>

@@ -2,6 +2,7 @@ import { FileUpload } from "./FileUpload";
 import { ModalRoot } from "./ModalRoot";
 import { NewFolder } from "./NewFolder";
 import { Preview } from "./Preview";
+import { RenameFile } from "./RenameFile";
 import { RenameFolder } from "./RenameFolder";
 
 export function Modals() {
@@ -12,6 +13,9 @@ export function Modals() {
       </ModalRoot>
       <ModalRoot name="RenameFolder">
         <RenameFolder />
+      </ModalRoot>
+      <ModalRoot name="RenameFile">
+        <RenameFile />
       </ModalRoot>
       <ModalRoot name="NewFile">
         <FileUpload />

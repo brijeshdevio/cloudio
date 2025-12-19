@@ -3,3 +3,7 @@ export interface FileForm {
   folder?: string;
 }
 
+export interface RenameFileForm {
+  name: string;
+  id: string;
+}

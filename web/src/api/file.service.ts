@@ -13,6 +13,9 @@ export const FileService = {
 
   getById: async (id: string) => (await http.get(`/files/${id}`)).data,
 
+  update: async (id: string, formData: { newName: string }) =>
+    (await http.put(`/files/${id}`, formData)).data,
+
   star: async (id: string) => (await http.patch(`/files/${id}/star`)).data,
 
   unstar: async (id: string) => (await http.patch(`/files/${id}/unstar`)).data,

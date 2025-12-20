@@ -10,7 +10,7 @@ import { useItemsView } from "@/queries/views.queries";
 import { useModal } from "@/app/providers";
 import type { ModalsType } from "@/types";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function DriveHeader() {
   const { modal } = useModal();
@@ -46,14 +46,23 @@ function DriveHeader() {
 
 export function MyDrive() {
   const { folder_id } = useParams();
+  const [_, setSearchParams] = useSearchParams();
   const {
     folders,
     files,
+    meta,
     isLoading,
     currentFolder,
     refetchItems,
     refetchItem,
   } = useItemsView();
+
+  const handleClick = (page: number) => {
+    setSearchParams({ page: page.toString() });
+    setTimeout(() => {
+      if (!folder_id && location.pathname === "/my-drive") refetchItems();
+    }, 100);
+  };
 
   useEffect(() => {
     if (!folder_id && location.pathname === "/my-drive") refetchItems();
@@ -82,7 +91,7 @@ export function MyDrive() {
       </section>
 
       <section>
-        <Pagination isLoading={isLoading} />
+        <Pagination {...meta} onClick={handleClick} isLoading={isLoading} />
       </section>
     </div>
   );

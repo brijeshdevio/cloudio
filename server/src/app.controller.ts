@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Req, Res, UseGuards } from '@nestjs/common';
 import type { Response } from 'express';
 import { AppService } from './app.service';
-import { AuthGuard } from './common';
+import { AuthGuard, QueryDto } from './common';
 
 @Controller()
 export class AppController {
@@ -15,40 +15,43 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Get('items')
   async handleGetItems(
-    @Req() req: { user: { sub: string } },
+    @Req() req: { user: { sub: string }; query: QueryDto },
     @Res() res: Response,
   ): Promise<Response> {
-    const items = await this.appService.getItems(req.user.sub);
+    const items = await this.appService.getItems(req.user.sub, req.query);
     return res.json(items);
   }
 
   @UseGuards(AuthGuard)
   @Get('stars')
   async handleGetStarItems(
-    @Req() req: { user: { sub: string } },
+    @Req() req: { user: { sub: string }; query: QueryDto },
     @Res() res: Response,
   ): Promise<Response> {
-    const items = await this.appService.getStarredItems(req.user.sub);
+    const items = await this.appService.getStarredItems(
+      req.user.sub,
+      req.query,
+    );
     return res.json(items);
   }
 
   @UseGuards(AuthGuard)
   @Get('trash')
   async handleGetTrashItems(
-    @Req() req: { user: { sub: string } },
+    @Req() req: { user: { sub: string }; query: QueryDto },
     @Res() res: Response,
   ): Promise<Response> {
-    const items = await this.appService.getTrashItems(req.user.sub);
+    const items = await this.appService.getTrashItems(req.user.sub, req.query);
     return res.json(items);
   }
 
   @UseGuards(AuthGuard)
   @Get('recent')
   async handleGetRecentItems(
-    @Req() req: { user: { sub: string } },
+    @Req() req: { user: { sub: string }; query: QueryDto },
     @Res() res: Response,
   ): Promise<Response> {
-    const items = await this.appService.getRecentItems(req.user.sub);
+    const items = await this.appService.getRecentItems(req.user.sub, req.query);
     return res.json(items);
   }
 

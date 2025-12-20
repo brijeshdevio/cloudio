@@ -72,3 +72,19 @@ export type StarTableProps = {
   mimeType?: string;
   updatedAt: string;
 };
+
+export interface Query {
+  page: number;
+  limit: number;
+}
+
+export interface Pagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  onClick: (page: number) => void;
+  isLoading: boolean;
+}

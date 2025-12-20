@@ -1,9 +1,18 @@
+import { useSearchParams } from "react-router-dom";
 import { NotFoundItems, Pagination, Table, TableBody } from "@/components";
 import { useTrashView } from "@/queries/views.queries";
 import { useEffect } from "react";
 
 export function Trash() {
+  const [_, setSearchParams] = useSearchParams();
   const { data, isPending, refetch } = useTrashView();
+
+  const handleClick = (page: number) => {
+    setSearchParams({ page: page.toString() });
+    setTimeout(() => {
+      refetch();
+    }, 100);
+  };
 
   useEffect(() => {
     refetch();
@@ -33,7 +42,11 @@ export function Trash() {
       </section>
 
       <section>
-        <Pagination isLoading={isPending} />
+        <Pagination
+          {...data?.meta}
+          onClick={handleClick}
+          isLoading={isPending}
+        />
       </section>
     </div>
   );

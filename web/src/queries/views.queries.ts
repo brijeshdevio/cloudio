@@ -1,13 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ViewService } from "@/api/view.service";
 
 export const useItemsView = () => {
   const { folder_id } = useParams();
+  const [query] = useSearchParams();
+
+  const page = parseInt(query.get("page") || "1");
+  const limit = parseInt(query.get("limit") || "10");
+  const queries = { page, limit };
 
   const itemsQuery = useQuery({
-    queryKey: ["items"],
-    queryFn: () => ViewService.getItems(),
+    queryKey: ["items", queries],
+    queryFn: () => ViewService.getItems(queries),
     refetchOnWindowFocus: false,
     enabled: false,
   });
@@ -24,11 +29,13 @@ export const useItemsView = () => {
 
   const folders = itemQuery.data?.folders || itemsQuery.data?.folders || [];
   const files = itemQuery.data?.files || itemsQuery.data?.files || [];
+  const meta = itemQuery.data?.meta || itemsQuery.data?.meta;
   const currentFolder = itemQuery.data?.folder;
 
   return {
     folders,
     files,
+    meta,
     isLoading: itemsQuery.isPending,
     currentFolder,
     refetchItem,
@@ -37,27 +44,45 @@ export const useItemsView = () => {
 };
 
 export const useRecentView = () => {
+  const [query] = useSearchParams();
+
+  const page = parseInt(query.get("page") || "1");
+  const limit = parseInt(query.get("limit") || "10");
+  const queries = { page, limit };
+
   return useQuery({
-    queryKey: ["recent"],
-    queryFn: () => ViewService.getRecent(),
+    queryKey: ["recent", queries],
+    queryFn: () => ViewService.getRecent(queries),
     refetchOnWindowFocus: false,
     enabled: false,
   });
 };
 
 export const useStarsView = () => {
+  const [query] = useSearchParams();
+
+  const page = parseInt(query.get("page") || "1");
+  const limit = parseInt(query.get("limit") || "10");
+  const queries = { page, limit };
+
   return useQuery({
-    queryKey: ["stars"],
-    queryFn: () => ViewService.getStars(),
+    queryKey: ["stars", queries],
+    queryFn: () => ViewService.getStars(queries),
     refetchOnWindowFocus: false,
     enabled: false,
   });
 };
 
 export const useTrashView = () => {
+  const [query] = useSearchParams();
+
+  const page = parseInt(query.get("page") || "1");
+  const limit = parseInt(query.get("limit") || "10");
+  const queries = { page, limit };
+
   return useQuery({
-    queryKey: ["trash"],
-    queryFn: () => ViewService.getTrash(),
+    queryKey: ["trash", queries],
+    queryFn: () => ViewService.getTrash(queries),
     refetchOnWindowFocus: false,
     enabled: false,
   });

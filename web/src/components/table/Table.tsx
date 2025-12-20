@@ -19,6 +19,7 @@ import {
   useUnstarFolder,
 } from "@/queries/folder.queries";
 import {
+  useDeleteFile,
   useRestoreFile,
   useStarFile,
   useTrashFile,
@@ -146,11 +147,17 @@ const FileOption = ({ _id, name, trashed, starred }: TableDataProps) => {
   const { isPending: isPendingTrash, mutate: mutateTrash } = useTrashFile();
   const { isPending: isPendingRestore, mutate: mutateRestore } =
     useRestoreFile();
+  const { isPending: isPendingDelete, mutate: mutateDelete } = useDeleteFile();
 
   const handleClickStar = () => mutateStar(_id);
   const handleClickUnstar = () => mutateUnstar(_id);
   const handleClickTrash = () => mutateTrash(_id);
   const handleClickRestore = () => mutateRestore(_id);
+  const handleClickDelete = () => {
+    if (window.confirm("Are you sure you want to delete this file?")) {
+      mutateDelete(_id);
+    }
+  };
 
   const handleRenameClick = () => {
     const query = new URLSearchParams();
@@ -223,7 +230,7 @@ const FileOption = ({ _id, name, trashed, starred }: TableDataProps) => {
           )}
         </li>
         <li>
-          <button>
+          <button onClick={handleClickDelete} disabled={isPendingDelete}>
             <Trash2 className="text-error" size={15} />
             <span>Delete</span>
           </button>

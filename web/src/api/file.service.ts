@@ -24,4 +24,6 @@ export const FileService = {
 
   restore: async (id: string) =>
     (await http.patch(`/files/${id}/restore`)).data,
+
+  delete: async (id: string) => (await http.delete(`/files/${id}`)).data,
 };

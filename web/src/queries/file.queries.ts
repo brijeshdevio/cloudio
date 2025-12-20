@@ -5,7 +5,12 @@ import type { AxiosResponse } from "axios";
 import { FileService } from "@/api/file.service";
 import type { FileForm, RenameFileForm } from "@/types/file";
 import { errorHandler } from "@/utils";
-import { useItemsView, useStarsView, useTrashView } from "./views.queries";
+import {
+  useItemsView,
+  useRecentView,
+  useStarsView,
+  useTrashView,
+} from "./views.queries";
 
 export const useUploadFile = () => {
   const { folder_id } = useParams();
@@ -84,7 +89,7 @@ export const useUnstarFile = () => {
 };
 
 export const useTrashFile = () => {
- const { refetchItem, refetchItems } = useItemsView();
+  const { refetchItem, refetchItems } = useItemsView();
   const { folder_id } = useParams();
 
   return useMutation({
@@ -111,6 +116,28 @@ export const useRestoreFile = () => {
     onSuccess: (data: AxiosResponse["data"]) => {
       toast.success(data.message);
       refetch();
+    },
+    onError: errorHandler,
+  });
+};
+
+export const useDeleteFile = () => {
+  const { folder_id } = useParams();
+  const { refetch: refetchTrash } = useTrashView();
+  const { refetch: refetchStar } = useStarsView();
+  const { refetch: refetchRecent } = useRecentView();
+  const { refetchItem, refetchItems } = useItemsView();
+
+  return useMutation({
+    mutationKey: ["delete-file"],
+    mutationFn: (id: string) => FileService.delete(id),
+    onSuccess: (data: AxiosResponse["data"]) => {
+      toast.success(data.message);
+      if (folder_id) refetchItem();
+      if (location.pathname === "/my-drive") refetchItems();
+      if (location.pathname === "/starred") refetchStar();
+      if (location.pathname === "/trash") refetchTrash();
+      if (location.pathname === "/recent") refetchRecent();
     },
     onError: errorHandler,
   });

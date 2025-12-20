@@ -7,12 +7,12 @@ const formFields = [
   {
     type: "email",
     name: "email",
-    placeholder: "2VH0R@example.com",
+    placeholder: "john.doe@me.com",
   },
   {
     type: "password",
     name: "password",
-    placeholder: "Password",
+    placeholder: "************",
   },
 ];
 

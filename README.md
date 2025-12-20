@@ -123,6 +123,7 @@ This project is ideal for learning how large-scale file systems like Google Driv
 - Permanent deletion
 - Storage usage tracking
 - Recent activity tracking
+- Smart pagination
 
 ---
 

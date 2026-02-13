@@ -1,0 +1,57 @@
+@BASE_URL = http://localhost:4000
+
+
+### GET - /
+GET {{BASE_URL}}
+
+
+### POST - /auth/register
+POST {{BASE_URL}}/auth/register
+Content-Type: application/json
+
+{
+    "name": "Seem",
+    "email": "seema@ex.com",
+    "password": "seema1234"
+}
+
+
+### POST - /auth/login
+POST {{BASE_URL}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "seema@ex.com",
+    "password": "seema1234"
+}
+
+
+### POST - /auth/logout
+POST {{BASE_URL}}/auth/logout
+
+
+### POST - /auth/refresh
+POST {{BASE_URL}}/auth/refresh
+
+
+### GET - /users/me
+GET {{BASE_URL}}/users/me
+
+
+### PATCH - /users/me
+PATCH {{BASE_URL}}/users/me
+Content-Type: application/json
+
+{
+    "name": "Seem"
+}
+
+
+### PATCH - /users/me/password
+PATCH {{BASE_URL}}/users/me/password
+Content-Type: application/json
+
+{
+    "oldPassword": "seema12345",
+    "newPassword": "seema1234"
+}

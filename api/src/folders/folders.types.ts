@@ -1,8 +1,15 @@
 import { z } from 'zod';
-import { CreateFolderSchema, QueryFolderSchema } from './dto';
+import {
+  CreateFolderSchema,
+  QueryFolderSchema,
+  SearchFolderSchema,
+  RenameFolderSchema,
+} from './dto';
 
 export type CreateFolderDto = z.infer<typeof CreateFolderSchema>;
 export type QueryFolderDto = z.infer<typeof QueryFolderSchema>;
+export type SearchFolderDto = z.infer<typeof SearchFolderSchema>;
+export type RenameFolderDto = z.infer<typeof RenameFolderSchema>;
 
 export type CreateFolderResponse = {
   id: string;

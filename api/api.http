@@ -62,10 +62,22 @@ POST  {{BASE_URL}}/folders
 Content-Type: application/json
 
 {
-    "name": "ReactJS",
-    "parentId": "2fde6342-0215-4bab-86aa-e4544f63c68a"
+    "name": "Documents"
 }
 
 
 ### GET - /folders
 GET  {{BASE_URL}}/folders
+
+
+### GET - /folders/search
+GET {{BASE_URL}}/folders/search?query=documents
+
+
+### PATCH - /folders/:id
+PATCH {{BASE_URL}}/folders/8aa5547c-fbdd-458b-9737-3fcdaf201f21
+Content-Type: application/json
+
+{
+    "name": "Docs"
+}

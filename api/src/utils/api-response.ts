@@ -18,10 +18,14 @@ export function apiResponse<D, R>(
     statusCode = 200,
   }: ApiResponse<D, R>,
 ) {
+  const transformData: D = JSON.parse(
+    JSON.stringify(data || {}),
+  ) as unknown as D;
+
   return res.status(statusCode).json({
     success,
     statusCode,
-    data,
+    data: transformData,
     message,
     ...rest,
   });

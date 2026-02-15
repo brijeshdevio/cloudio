@@ -55,3 +55,17 @@ Content-Type: application/json
     "oldPassword": "seema12345",
     "newPassword": "seema1234"
 }
+
+
+### POST - /folders
+POST  {{BASE_URL}}/folders
+Content-Type: application/json
+
+{
+    "name": "ReactJS",
+    "parentId": "2fde6342-0215-4bab-86aa-e4544f63c68a"
+}
+
+
+### GET - /folders
+GET  {{BASE_URL}}/folders

@@ -1,6 +1,7 @@
 export const PRISMA = {
   CONFLICT: 'P2002',
   NOT_FOUND: 'P2025',
+  VIOLATION: 'P2003',
 };
 export const EXPIRED_ACCESS_TOKEN = '1h';
 export const EXPIRED_REFRESH_TOKEN = new Date(
